@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:library_app/blocs/blocs.dart';
 
 import 'package:library_app/pages/main_page.dart';
 
-void main() => runApp(LibraryApp());
+void main() {
+  BlocSupervisor.delegate = SimpleBlocDelegate();
+
+  runApp(LibraryApp());
+}
 
 class LibraryApp extends StatelessWidget {
   // This widget is the root of your application.
