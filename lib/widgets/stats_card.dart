@@ -1,30 +1,35 @@
 import 'package:flutter/material.dart';
 
+import 'package:library_app/models/stats.dart';
+
 class StatsCard extends StatefulWidget {
-  @override  
+  final Stats stats;
+
+  StatsCard({Key key, @required this.stats})
+    : assert(stats != null);
+
+  @override
   _StatsCardState createState() => _StatsCardState();
 }
 
 class _StatsCardState extends State<StatsCard> {
-  int year = 2019;
-  int count = 42;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ExpansionTile(
-        title: _title(year, count),
+        title: _title(),
         children: _expandedContent(),
       ),
     );
   }
 
-  _title(int year, int count) {
+  _title() {
     return Row(
       children: <Widget>[
         Expanded(
           flex: 2,
-          child: Text(year.toString(),
+          child: Text(widget.stats.name,
             style: TextStyle(
               fontSize: 24.0,
               fontWeight: FontWeight.bold
@@ -36,7 +41,7 @@ class _StatsCardState extends State<StatsCard> {
           child: Row(
             children: <Widget>[
               Text('Totalt: '),
-              Text(count.toString()),
+              Text(widget.stats.count.toString()),
             ],
           ),
         ),
@@ -47,23 +52,23 @@ class _StatsCardState extends State<StatsCard> {
   _expandedContent() {
     List<Widget> expandedContent = new List<Widget>();
     // expandedYear.add(_exportIcon(year));
-    // expandedYear.addAll(months.map((month) => _monthRow(month)));
-    expandedContent.add(_monthRow());
+    List<MonthStats> monthStats = (widget.stats as YearStats).monthStats;
+    expandedContent.addAll(monthStats.map((month) => _monthRow(month)));
     return expandedContent;
   }
 
-  _monthRow() {
+  _monthRow(MonthStats month) {
     return ListTile(
       title: Row(
         children: <Widget>[
           Expanded(
             flex: 2,
-            child: Text('July'),
+            child: Text(month.name),
           ),
           Expanded(
             flex: 2,
             child: Text(
-              '42',
+              month.count.toString(),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           )

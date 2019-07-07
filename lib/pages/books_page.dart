@@ -52,7 +52,7 @@ class _BooksPageState extends State<BooksPage> {
     return Card(
       child: ListTile(
         title: Text('${book.title} - ${book.author}'),
-          subtitle: book.date != null ? Text(book.date) : Text(''),
+          subtitle: book.date != null ? Text(book.date.asLabel()) : Text(''),
       ),
     );
   }

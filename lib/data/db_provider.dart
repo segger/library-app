@@ -71,4 +71,13 @@ class DBProvider {
     final db = await database;
     return await db.query(table);
   }
+
+  Future<List<Map<String, dynamic>>> getListGroupBy(String table, String groupBy, [String sumCol = 'count']) async {
+    final db = await database;
+    List<Map<String, dynamic>> res = await db.rawQuery(
+      "SELECT $groupBy, sum($sumCol) as tot "
+      "FROM $table GROUP BY $groupBy"
+    );
+    return res;
+  }
 }

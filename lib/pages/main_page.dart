@@ -17,10 +17,15 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   NavTabsBloc _tabBloc;
+  LibraryBloc _libraryBloc;
+  StatsBloc _statsBloc;
+
 
   @override
   void initState() {
     _tabBloc = BlocProvider.of<NavTabsBloc>(context);
+    _libraryBloc = BlocProvider.of<LibraryBloc>(context);
+    _statsBloc = BlocProvider.of<StatsBloc>(context);
     super.initState();
   }
 
@@ -45,6 +50,15 @@ class _MainPageState extends State<MainPage> {
   Widget _appBar() {
     return AppBar(
       title: Text('Library'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.refresh),
+          onPressed: () {
+            _libraryBloc.dispatch(LoadLibraryEvent());
+            _statsBloc.dispatch(LoadStatsEvent());
+          },
+        ),
+      ]
     );
   }
 }

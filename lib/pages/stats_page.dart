@@ -41,9 +41,9 @@ class _StatsPageState extends State<StatsPage> {
 
   Widget _statsList(StatsLoaded state) {
     return ListView.builder(
-      itemCount: 1,
+      itemCount: state.stats.length,
       itemBuilder: (context, position) {
-        return StatsCard();
+        return StatsCard(stats: state.stats[position]);
       },
     );
   }

@@ -24,7 +24,8 @@ class AddBookLibraryEvent extends LibraryEvent {
 class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
   final BookRepository bookRepository;
 
-  LibraryBloc({@required this.bookRepository}) : assert(bookRepository != null);
+  LibraryBloc({@required this.bookRepository})
+    : assert(bookRepository != null);
 
   @override
   LibraryState get initialState => LibraryInit();

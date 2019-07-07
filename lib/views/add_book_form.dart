@@ -23,7 +23,7 @@ class _AddBookFormState extends State<AddBookForm> {
 
   void _save() {
     var newBook = Book(
-      date: _dateController.value.text,
+      date: ReadDate.of(_dateController.value.text),
       title: _titleController.value.text,
       author: _authorController.value.text,
     );

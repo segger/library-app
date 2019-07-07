@@ -1,15 +1,19 @@
+import 'package:library_app/models/date.dart';
+
+export './date.dart';
+
 class Book {
   final int id;
   String title;
   String author;
-  String date;
+  ReadDate date;
 
   Book({this.id, this.title, this.author, this.date});
 
   Map<String, dynamic> asMap() {
     return {
       "id": id,
-      "date": date,
+      "date": date.asLabel(),
       "title": title,
       "author": author,
     };
@@ -18,7 +22,7 @@ class Book {
   static Book of(Map<String, dynamic> dbMap) {
     return Book(
         id: dbMap['id'],
-        date: dbMap['date'],
+        date: ReadDate.of(dbMap['date']),
         title: dbMap['title'],
         author: dbMap['author'],
       );

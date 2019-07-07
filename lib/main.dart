@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 
 import 'package:library_app/blocs/blocs.dart';
 import 'package:library_app/data/repositories.dart';
 
 import 'package:library_app/data/db_provider.dart';
+import 'package:library_app/data/stats_repository.dart';
 
 import 'package:library_app/pages/main_page.dart';
 
@@ -16,14 +16,21 @@ void main() {
   final BookRepository bookRepository = BookRepository(
     bookProvider: DBProvider.instance
   );
+  final StatsRepository statsRepository = StatsRepository(
+    statsProvider: DBProvider.instance
+  );
 
-  runApp(LibraryApp(bookRepository: bookRepository));
+  runApp(LibraryApp(
+    bookRepository: bookRepository,
+    statsRepository: statsRepository,
+  ));
 }
 
 class LibraryApp extends StatelessWidget {
   final BookRepository bookRepository;
+  final StatsRepository statsRepository;
 
-  LibraryApp({Key key, @required this.bookRepository})
+  LibraryApp({Key key, @required this.bookRepository, @required this.statsRepository})
     : super(key: key);
   
   @override
@@ -44,7 +51,8 @@ class LibraryApp extends StatelessWidget {
               ..dispatch(LoadLibraryEvent()),
           ),
           BlocProvider<StatsBloc>(
-            builder: (context) => StatsBloc()..dispatch(LoadStatsEvent()),
+            builder: (context) => StatsBloc(statsRepository)
+            ..dispatch(LoadStatsEvent()),
           )
         ],
         child: MainPage(),

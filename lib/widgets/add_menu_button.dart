@@ -13,6 +13,7 @@ class _AddMenuButtonState extends State<AddMenuButton>
   with SingleTickerProviderStateMixin {
 
   LibraryBloc _libraryBloc;
+  StatsBloc _statsBloc;
 
   bool menuOpen = false;
   AnimationController _menuController;
@@ -23,6 +24,7 @@ class _AddMenuButtonState extends State<AddMenuButton>
   @override
   void initState() {
     _libraryBloc = BlocProvider.of<LibraryBloc>(context);
+    _statsBloc = BlocProvider.of<StatsBloc>(context);
     _initMenu();
     super.initState();
   }
@@ -67,6 +69,7 @@ class _AddMenuButtonState extends State<AddMenuButton>
         builder: (context) => AddBookForm(
           onSave: (book) {
             _libraryBloc.dispatch(AddBookLibraryEvent(book: book));
+            _statsBloc.dispatch(AddBookStatsEvent(date: book.date));
           }
         )
       )
