@@ -9,7 +9,7 @@ class LibraryLoaded extends LibraryState {}
 abstract class LibraryEvent {}
 
 class LoadLibraryEvent extends LibraryEvent {}
-class AddLibraryBookEvent extends LibraryEvent {}
+class AddBookLibraryEvent extends LibraryEvent {}
 
 class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
   @override
@@ -20,7 +20,7 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
     if (event is LoadLibraryEvent) {
       yield LibraryLoaded();
     }
-    if (event is AddLibraryBookEvent) {
+    if (event is AddBookLibraryEvent) {
       yield LibraryLoaded();
     }
   }

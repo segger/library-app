@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:library_app/blocs/blocs.dart';
+import 'package:library_app/blocs/library.dart';
+
+import 'package:library_app/widgets/load_components.dart';
 
 class BooksPage extends StatefulWidget {
   
@@ -24,10 +26,10 @@ class _BooksPageState extends State<BooksPage> {
       bloc: _bloc,
       builder: (BuildContext context, LibraryState state) {
         if (state is LibraryInit) {
-          return Center(child: CircularProgressIndicator());
+          return Loading();
         }
         if (state is LibraryError) {
-          return Center(child: Text('Failed to read books'));
+          return LoadingError(errorText: 'Failed to read books');
         }
         if (state is LibraryLoaded) {
           return _libraryList(state);
