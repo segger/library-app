@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:library_app/blocs/blocs.dart';
+
 class BooksPage extends StatefulWidget {
   
   @override  
@@ -7,10 +10,46 @@ class BooksPage extends StatefulWidget {
 }
 
 class _BooksPageState extends State<BooksPage> {
+  LibraryBloc _bloc;
+
+  @override
+  void initState() {
+    _bloc = BlocProvider.of<LibraryBloc>(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('BooksPage'),
+    return BlocBuilder(
+      bloc: _bloc,
+      builder: (BuildContext context, LibraryState state) {
+        if (state is LibraryInit) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (state is LibraryError) {
+          return Center(child: Text('Failed to read books'));
+        }
+        if (state is LibraryLoaded) {
+          return _libraryList(state);
+        }
+      },
+    );
+  }
+
+  Widget _libraryList(LibraryLoaded state) {
+    return ListView.builder(
+      itemCount: 1,
+      itemBuilder: (context, position) {
+        return _libraryItem();
+      }
+    );
+  }
+
+  Widget _libraryItem() {
+    return Card(
+      child: ListTile(
+        title: Text('Vild och fri - Marilyn Halvorson'),
+      ),
     );
   }
 }

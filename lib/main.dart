@@ -22,6 +22,9 @@ class LibraryApp extends StatelessWidget {
           BlocProvider<NavTabsBloc>(
             builder: (context) => NavTabsBloc(),
           ),
+          BlocProvider<LibraryBloc>(
+            builder: (context) => LibraryBloc(),
+          ),
         ],
         child: MainPage(),
       ),
