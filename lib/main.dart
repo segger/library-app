@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meta/meta.dart';
 
 import 'package:library_app/blocs/blocs.dart';
+import 'package:library_app/data/repositories.dart';
+
+import 'package:library_app/data/db_provider.dart';
 
 import 'package:library_app/pages/main_page.dart';
 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
-  runApp(LibraryApp());
+  final BookRepository bookRepository = BookRepository(
+    bookProvider: DBProvider.instance
+  );
+
+  runApp(LibraryApp(bookRepository: bookRepository));
 }
 
 class LibraryApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final BookRepository bookRepository;
+
+  LibraryApp({Key key, @required this.bookRepository})
+    : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,7 +40,8 @@ class LibraryApp extends StatelessWidget {
             builder: (context) => NavTabsBloc(),
           ),
           BlocProvider<LibraryBloc>(
-            builder: (context) => LibraryBloc()..dispatch(LoadLibraryEvent()),
+            builder: (context) => LibraryBloc(bookRepository: bookRepository)
+              ..dispatch(LoadLibraryEvent()),
           ),
           BlocProvider<StatsBloc>(
             builder: (context) => StatsBloc()..dispatch(LoadStatsEvent()),

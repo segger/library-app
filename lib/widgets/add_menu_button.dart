@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:library_app/blocs/blocs.dart';
+import 'package:library_app/views/add_book_form.dart';
 
 class AddMenuButton extends StatefulWidget {
   @override
@@ -8,6 +12,8 @@ class AddMenuButton extends StatefulWidget {
 class _AddMenuButtonState extends State<AddMenuButton>
   with SingleTickerProviderStateMixin {
 
+  LibraryBloc _libraryBloc;
+
   bool menuOpen = false;
   AnimationController _menuController;
   Animation<Color> _menuColor;
@@ -16,7 +22,7 @@ class _AddMenuButtonState extends State<AddMenuButton>
 
   @override
   void initState() {
-    //_libraryBloc = BlocProvider.of<LibraryBloc>(context);
+    _libraryBloc = BlocProvider.of<LibraryBloc>(context);
     _initMenu();
     super.initState();
   }
@@ -57,15 +63,14 @@ class _AddMenuButtonState extends State<AddMenuButton>
 
   _addNewBook() {
     _toggleMenu();
-    /*
     Navigator.push(context, MaterialPageRoute(
         builder: (context) => AddBookForm(
           onSave: (book) {
-            _libraryBloc.dispatch(AddBook(book: book));
+            _libraryBloc.dispatch(AddBookLibraryEvent(book: book));
           }
         )
       )
-    );*/
+    );
   }
 
   Widget _addNewBookMenuItem() {

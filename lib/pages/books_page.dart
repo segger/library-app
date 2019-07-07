@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_app/blocs/library.dart';
+import 'package:library_app/models/book.dart';
 
 import 'package:library_app/widgets/load_components.dart';
 
@@ -40,17 +41,18 @@ class _BooksPageState extends State<BooksPage> {
 
   Widget _libraryList(LibraryLoaded state) {
     return ListView.builder(
-      itemCount: 1,
+      itemCount: state.books.length,
       itemBuilder: (context, position) {
-        return _libraryItem();
+        return _libraryItem(state.books[position]);
       }
     );
   }
 
-  Widget _libraryItem() {
+  Widget _libraryItem(Book book) {
     return Card(
       child: ListTile(
-        title: Text('Vild och fri - Marilyn Halvorson'),
+        title: Text('${book.title} - ${book.author}'),
+          subtitle: book.date != null ? Text(book.date) : Text(''),
       ),
     );
   }
