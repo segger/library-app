@@ -58,6 +58,30 @@ class YearStats extends Stats {
 
 class MonthStats extends Stats {
   int month;
+
+  static const monthNames = {
+    1: 'Januari',
+    2: 'Februari',
+    3: 'Mars',
+    4: 'April',
+    5: 'Maj',
+    6: 'Juni',
+    7: 'Juli',
+    8: 'Augusti',
+    9: 'September',
+    10: 'Oktober',
+    11: 'November',
+    12: 'December'
+  };
+
   MonthStats({String name, int count, this.month})
     : super(name, count);
+
+  static MonthStats of(Map<String, dynamic> dbMap) {
+    return MonthStats(
+      month: dbMap['month'],
+      name: monthNames[dbMap['month']],
+      count: dbMap['tot']
+    );
+  }
 }

@@ -21,6 +21,16 @@ class StatsRepository {
     });
   }
 
+  Future<List<MonthStats>> getMonthStats(int year) async {
+    var where = {'year': year};
+    List<Map<String, dynamic>> dbList = await statsProvider.getListGroupByWhere(
+      tbl, "month", where
+    );
+    return List.generate(dbList.length, (i) {
+      return MonthStats.of(dbList[i]);
+    });
+  }
+
   Future<void> increase(StatsEntity stats) async {
     var searchParams = stats.date.asSearchParams();
     List<Map<String, dynamic>> dbList = await statsProvider.getListByCols(tbl, searchParams);

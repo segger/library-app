@@ -60,7 +60,7 @@ class _MainPageState extends State<MainPage> {
           onPressed: () {
             // Reload
             _libraryBloc.dispatch(LoadLibraryEvent());
-            _statsBloc.dispatch(LoadStatsEvent());
+            _statsBloc.dispatch(LoadYearStatsEvent());
           },
         ),
       ]

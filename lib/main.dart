@@ -52,7 +52,7 @@ class LibraryApp extends StatelessWidget {
           ),
           BlocProvider<StatsBloc>(
             builder: (context) => StatsBloc(statsRepository)
-            ..dispatch(LoadStatsEvent()),
+            ..dispatch(LoadYearStatsEvent()),
           )
         ],
         child: MainPage(),

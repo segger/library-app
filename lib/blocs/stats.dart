@@ -14,10 +14,14 @@ class StatsLoaded extends StatsState {
 
 abstract class StatsEvent {}
 
-class LoadStatsEvent extends StatsEvent {}
+class LoadYearStatsEvent extends StatsEvent {}
 class AddBookStatsEvent extends StatsEvent {
   final ReadDate date;
   AddBookStatsEvent({this.date});
+}
+class LoadMonthStatsEvent extends StatsEvent {
+  final int year;
+  LoadMonthStatsEvent({this.year});
 }
 
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
@@ -31,12 +35,26 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
 
   @override
   Stream<StatsState> mapEventToState(StatsEvent event) async* {
-    if (event is LoadStatsEvent) {
+    if (event is LoadYearStatsEvent) {
       try {
         List<YearStats> stats = await statsRepository.getYearStats();
         yield StatsLoaded(stats: stats);
       } catch (_) {
         yield StatsError();
+      }
+    }
+    if (event is LoadMonthStatsEvent) {
+      if (currentState is StatsLoaded) {
+        List<YearStats> currentStats = (currentState as StatsLoaded).stats;
+        YearStats yearStats = currentStats
+                  .firstWhere((yearStats) => 
+                    int.parse(yearStats.name) == event.year,
+                    orElse: () => null);
+        if(yearStats != null) {
+          List<MonthStats> monthStats = await statsRepository.getMonthStats(event.year);
+          yearStats.monthStats = monthStats;
+        }
+        yield StatsLoaded(stats: currentStats);
       }
     }
     if (event is AddBookStatsEvent) {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:library_app/blocs/stats.dart';
 
 import 'package:library_app/models/stats.dart';
 
@@ -13,18 +15,32 @@ class StatsCard extends StatefulWidget {
 }
 
 class _StatsCardState extends State<StatsCard> {
+  StatsBloc _bloc;
+
+  //final GlobalKey<AppExpansionTileState> expansionTile = new GlobalKey();
+
+  @override
+  void initState() {
+    _bloc = BlocProvider.of<StatsBloc>(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ExpansionTile(
         title: _title(),
-        children: _expandedContent(),
+        onExpansionChanged: (open) {
+          if(open) {
+            _bloc.dispatch(LoadMonthStatsEvent(year: int.parse(widget.stats.name)));
+          }
+        },
+        children: _expansionContent(),
       ),
     );
   }
 
-  _title() {
+  Widget _title() {
     return Row(
       children: <Widget>[
         Expanded(
@@ -49,11 +65,13 @@ class _StatsCardState extends State<StatsCard> {
     );
   }
 
-  _expandedContent() {
+  List<Widget> _expansionContent() {
     List<Widget> expandedContent = new List<Widget>();
     // expandedYear.add(_exportIcon(year));
+
     List<MonthStats> monthStats = (widget.stats as YearStats).monthStats;
     expandedContent.addAll(monthStats.map((month) => _monthRow(month)));
+    
     return expandedContent;
   }
 

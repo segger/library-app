@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:tuple/tuple.dart';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -67,17 +68,21 @@ class DBProvider {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getListByCols(String table, Map<String, dynamic> cols) async {
-    final db = await database;
+  Tuple2<String, List<dynamic>> whereBuilder(Map<String, dynamic> where) {
     String whereStr = '';
     List<dynamic> whereArgs = [];
-    cols.forEach((col, value) {
+    where.forEach((col, value) {
       whereStr += col + ' = ? AND ';
       whereArgs.add(value);
     });
     whereStr = whereStr.substring(0, whereStr.length - 5); // Remove last AND
-    
-    return await db.query(table, where: whereStr, whereArgs: whereArgs);
+    return Tuple2(whereStr, whereArgs);
+  }
+
+  Future<List<Map<String, dynamic>>> getListByCols(String table, Map<String, dynamic> where) async {
+    final db = await database;
+    Tuple2 whereTuple = whereBuilder(where);
+    return await db.query(table, where: whereTuple.item1, whereArgs: whereTuple.item2);
   }
 
   Future<List<Map<String, dynamic>>> getAll(String table) async {
@@ -85,12 +90,24 @@ class DBProvider {
     return await db.query(table);
   }
 
-  Future<List<Map<String, dynamic>>> getListGroupBy(String table, String groupBy, [String sumCol = 'count']) async {
-    final db = await database;
+  // [String sumCol = 'count'] - optional default parameter
+  /* raw query
     List<Map<String, dynamic>> res = await db.rawQuery(
       "SELECT $groupBy, sum($sumCol) as tot "
       "FROM $table GROUP BY $groupBy"
     );
-    return res;
+    return res;*/
+
+  Future<List<Map<String, dynamic>>> getListGroupBy(String table, String groupBy) async {
+    final db = await database;
+    List<String> columns = [groupBy, "sum(count) as tot"];
+    return db.query(table, columns: columns, groupBy: groupBy);
+  }
+
+  Future<List<Map<String, dynamic>>> getListGroupByWhere(String table, String groupBy, Map<String, dynamic> where) async {
+    final db = await database;
+    List<String> columns = [groupBy, "sum(count) as tot"];
+    Tuple2 whereTuple = whereBuilder(where);
+    return db.query(table, columns: columns, where: whereTuple.item1, whereArgs: whereTuple.item2, groupBy: groupBy);
   }
 }
