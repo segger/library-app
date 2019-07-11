@@ -67,6 +67,19 @@ class DBProvider {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getListByCols(String table, Map<String, dynamic> cols) async {
+    final db = await database;
+    String whereStr = '';
+    List<dynamic> whereArgs = [];
+    cols.forEach((col, value) {
+      whereStr += col + ' = ? AND ';
+      whereArgs.add(value);
+    });
+    whereStr = whereStr.substring(0, whereStr.length - 5); // Remove last AND
+    
+    return await db.query(table, where: whereStr, whereArgs: whereArgs);
+  }
+
   Future<List<Map<String, dynamic>>> getAll(String table) async {
     final db = await database;
     return await db.query(table);

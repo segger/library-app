@@ -18,6 +18,18 @@ class StatsEntity {
       "count": count
     };
   }
+
+  static StatsEntity of(Map<String, dynamic> dbMap) {
+    return StatsEntity(
+      id: dbMap['id'],
+      date: ReadDate(
+        year: dbMap['year'],
+        month: dbMap['month'],
+        day: dbMap['day']
+      ),
+      count: dbMap['count']
+    );
+  }
 }
 
 abstract class Stats {

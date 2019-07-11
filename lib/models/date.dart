@@ -18,4 +18,12 @@ class ReadDate {
     int day = int.parse(bookDate[2]);
     return ReadDate(year: year, month: month, day: day);
   }
+
+  Map<String, int> asSearchParams() {
+    return {
+      "year": year,
+      "month": month,
+      "day": day
+    };
+  }
 }

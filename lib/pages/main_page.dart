@@ -17,6 +17,8 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   NavTabsBloc _tabBloc;
+
+  // Reload
   LibraryBloc _libraryBloc;
   StatsBloc _statsBloc;
 
@@ -24,6 +26,8 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     _tabBloc = BlocProvider.of<NavTabsBloc>(context);
+
+    // Reload
     _libraryBloc = BlocProvider.of<LibraryBloc>(context);
     _statsBloc = BlocProvider.of<StatsBloc>(context);
     super.initState();
@@ -54,6 +58,7 @@ class _MainPageState extends State<MainPage> {
         IconButton(
           icon: Icon(Icons.refresh),
           onPressed: () {
+            // Reload
             _libraryBloc.dispatch(LoadLibraryEvent());
             _statsBloc.dispatch(LoadStatsEvent());
           },
