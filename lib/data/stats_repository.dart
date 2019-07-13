@@ -16,7 +16,7 @@ class StatsRepository {
     List<Map<String, dynamic>> dbList = await statsProvider.getListGroupBy(
       tbl, "year"
     );
-    return List.generate(dbList.length, (i) {
+    return dbList.isEmpty ? [] : List.generate(dbList.length, (i) {
       return YearStats.of(dbList[i]);
     });
   }
@@ -26,7 +26,7 @@ class StatsRepository {
     List<Map<String, dynamic>> dbList = await statsProvider.getListGroupByWhere(
       tbl, "month", where
     );
-    return List.generate(dbList.length, (i) {
+    return dbList.isEmpty ? [] : List.generate(dbList.length, (i) {
       return MonthStats.of(dbList[i]);
     });
   }

@@ -11,9 +11,22 @@ class BookRepository {
   BookRepository({@required this.bookProvider})
     : assert(bookProvider != null);
 
-  Future<List<Book>> getBookList() async {
-    List<Map<String, dynamic>> dbList = await bookProvider.getAll(DBConstants.BOOKS_TABLE);
-    return List.generate(dbList.length, (i) {
+  String _getOrderBy(SortOrder order) {
+    switch(order) {
+      case SortOrder.title:
+        return DBConstants.BOOKS_COL_TITLE;
+      case SortOrder.author:
+        return DBConstants.BOOKS_COL_AUTHOR;
+      case SortOrder.date:
+      default:
+        return DBConstants.BOOKS_COL_DATE + " desc";
+    }
+  }
+
+  Future<List<Book>> getBookList(SortOrder sortOrder, int startIdx, int limit) async {
+    String orderBy = _getOrderBy(sortOrder);
+    List<Map<String, dynamic>> dbList = await bookProvider.getAll(DBConstants.BOOKS_TABLE, orderBy, limit, startIdx);
+    return dbList.isEmpty ? [] : List.generate(dbList.length, (i) {
       return Book.of(dbList[i]);
     });
   }

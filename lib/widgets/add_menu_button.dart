@@ -68,7 +68,7 @@ class _AddMenuButtonState extends State<AddMenuButton>
     Navigator.push(context, MaterialPageRoute(
         builder: (context) => AddBookForm(
           onSave: (book) {
-            _libraryBloc.dispatch(AddBookLibraryEvent(book: book));
+            _libraryBloc.dispatch(AddBookLibraryEvent(book));
             _statsBloc.dispatch(AddBookStatsEvent(date: book.date));
           }
         )

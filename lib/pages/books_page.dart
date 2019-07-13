@@ -15,10 +15,28 @@ class BooksPage extends StatefulWidget {
 class _BooksPageState extends State<BooksPage> {
   LibraryBloc _bloc;
 
+  final _scrollController = ScrollController();
+  final _scrollThreashold = 200.0;
+
   @override
   void initState() {
     _bloc = BlocProvider.of<LibraryBloc>(context);
+    _scrollController.addListener(_onScroll);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (maxScroll - currentScroll <= _scrollThreashold) {
+      _bloc.dispatch(LoadLibraryEvent());
+    }
   }
 
   @override
@@ -44,7 +62,8 @@ class _BooksPageState extends State<BooksPage> {
       itemCount: state.books.length,
       itemBuilder: (context, position) {
         return _libraryItem(state.books[position]);
-      }
+      },
+      controller: _scrollController,
     );
   }
 

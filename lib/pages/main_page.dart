@@ -9,6 +9,9 @@ import 'package:library_app/pages/stats_page.dart';
 
 import 'package:library_app/widgets/add_menu_button.dart';
 import 'package:library_app/widgets/tab_selector.dart';
+import 'package:library_app/widgets/sort_order_icon.dart';
+
+import 'package:library_app/models/constants.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -18,15 +21,15 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   NavTabsBloc _tabBloc;
 
+  SortOrder _sortOrder = SortOrder.date;
+
   // Reload
   LibraryBloc _libraryBloc;
   StatsBloc _statsBloc;
 
-
   @override
   void initState() {
     _tabBloc = BlocProvider.of<NavTabsBloc>(context);
-
     // Reload
     _libraryBloc = BlocProvider.of<LibraryBloc>(context);
     _statsBloc = BlocProvider.of<StatsBloc>(context);
@@ -39,7 +42,7 @@ class _MainPageState extends State<MainPage> {
       bloc: _tabBloc,
       builder: (BuildContext context, NavTabs activeTab) {
         return Scaffold(
-          appBar: _appBar(),
+          appBar: _appBar(activeTab),
           body: activeTab == NavTabs.books ? BooksPage() : StatsPage(),
           bottomNavigationBar: TabSelector(
             activeTab: activeTab,
@@ -51,10 +54,16 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _appBar() {
+  Widget _appBar(NavTabs activeTab) {
     return AppBar(
       title: Text('Library'),
       actions: <Widget>[
+        activeTab == NavTabs.books ? SortOrderIcon(
+          onSortOrderUpdated: (sortOrder) {
+            _sortOrder = sortOrder;
+            _libraryBloc.dispatch(SortLibraryEvent(_sortOrder));
+          }
+        ) : Container(),
         IconButton(
           icon: Icon(Icons.refresh),
           onPressed: () {

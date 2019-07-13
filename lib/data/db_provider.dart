@@ -30,9 +30,9 @@ class DBProvider {
     await db.execute(
         "CREATE TABLE ${DBConstants.BOOKS_TABLE} ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-        "date TEXT,"
-        "title TEXT,"
-        "author TEXT)"
+        "${DBConstants.BOOKS_COL_DATE} TEXT,"
+        "${DBConstants.BOOKS_COL_TITLE} TEXT,"
+        "${DBConstants.BOOKS_COL_AUTHOR} TEXT)"
     );
     await db.execute(
       "CREATE TABLE ${DBConstants.STATS_TABLE} ("
@@ -85,9 +85,9 @@ class DBProvider {
     return await db.query(table, where: whereTuple.item1, whereArgs: whereTuple.item2);
   }
 
-  Future<List<Map<String, dynamic>>> getAll(String table) async {
+  Future<List<Map<String, dynamic>>> getAll(String table, String orderBy, int limit, int offset) async {
     final db = await database;
-    return await db.query(table);
+    return await db.query(table, orderBy: orderBy, limit: limit, offset: offset);
   }
 
   // [String sumCol = 'count'] - optional default parameter

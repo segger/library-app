@@ -1,4 +1,4 @@
-class ReadDate {
+class ReadDate implements Comparable<ReadDate>{
   int year;
   int month;
   int day;
@@ -25,5 +25,10 @@ class ReadDate {
       "month": month,
       "day": day
     };
+  }
+
+  @override
+  int compareTo(ReadDate other) {
+    return this.asLabel().compareTo(other.asLabel());
   }
 }

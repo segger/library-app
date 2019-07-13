@@ -1,6 +1,7 @@
 import 'package:library_app/models/date.dart';
 
 export './date.dart';
+export './constants.dart';
 
 class Book {
   final int id;
