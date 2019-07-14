@@ -7,7 +7,7 @@ import 'package:library_app/blocs/blocs.dart';
 import 'package:library_app/pages/books_page.dart';
 import 'package:library_app/pages/stats_page.dart';
 
-import 'package:library_app/widgets/add_menu_button.dart';
+import 'package:library_app/widgets/menu_button.dart';
 import 'package:library_app/widgets/tab_selector.dart';
 import 'package:library_app/widgets/sort_order_icon.dart';
 
@@ -48,7 +48,7 @@ class _MainPageState extends State<MainPage> {
             activeTab: activeTab,
             onTabSelected: (tab) => _tabBloc.dispatch(ChangeTabEvent(tab: tab)),
           ),
-          floatingActionButton: AddMenuButton(),
+          floatingActionButton: MenuButton(),
         );
       },
     );

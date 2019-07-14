@@ -46,11 +46,11 @@ class _SortOrderIconState extends State<SortOrderIcon> {
   _getSortOrderLabel(SortOrder order) {
     switch(order) {
       case SortOrder.date:
-        return "datum";
+        return "date";
       case SortOrder.title:
-        return "titel";
+        return "title";
       case SortOrder.author:
-        return "författare";
+        return "author";
       default:
         return "";
     }
@@ -58,7 +58,7 @@ class _SortOrderIconState extends State<SortOrderIcon> {
 
   SnackBar _notifySortOrderUpdated() {
     return SnackBar(
-      content: Text('Sorterar på ' + _getSortOrderLabel(_sortOrder)),
+      content: Text('Sort on ' + _getSortOrderLabel(_sortOrder)),
       duration: Duration(milliseconds: 1000),
     );
   }

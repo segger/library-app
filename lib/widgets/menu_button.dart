@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:library_app/blocs/blocs.dart';
 import 'package:library_app/views/add_book_form.dart';
+import 'package:library_app/views/export_year_form.dart';
 
-class AddMenuButton extends StatefulWidget {
+class MenuButton extends StatefulWidget {
   @override
-  _AddMenuButtonState createState() => _AddMenuButtonState();
+  _MenuButtonState createState() => _MenuButtonState();
 }
 
-class _AddMenuButtonState extends State<AddMenuButton>
+class _MenuButtonState extends State<MenuButton>
   with SingleTickerProviderStateMixin {
 
   LibraryBloc _libraryBloc;
@@ -76,6 +77,29 @@ class _AddMenuButtonState extends State<AddMenuButton>
     );
   }
 
+  _exportDialog() {
+    _toggleMenu();
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) {
+        return BlocProvider<ExportBloc>(
+          builder: (context) => ExportBloc()..dispatch(LoadExportYearsEvent()),
+          child: ExportYearForm(),
+        );
+      }
+    ));
+  }
+
+  Widget _exportMenuItem() {
+    return Container(
+      child: FloatingActionButton(
+        heroTag: 'export',
+        onPressed: _exportDialog,
+        tooltip: 'Exportera',
+        child: Icon(Icons.import_export),
+      ),
+    );
+  }
+
   Widget _addNewBookMenuItem() {
     return Container(
       child: FloatingActionButton(
@@ -107,6 +131,12 @@ class _AddMenuButtonState extends State<AddMenuButton>
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
+        Transform(
+          transform: Matrix4.translationValues(
+            0.0, _menuPos.value * 2.0, 0.0
+          ),
+          child: _exportMenuItem()
+        ),
         Transform(
           transform: Matrix4.translationValues(
             0.0, _menuPos.value, 0.0
