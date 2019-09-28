@@ -5,8 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_app/blocs/blocs.dart';
 import 'package:library_app/data/repositories.dart';
 
-import 'package:library_app/data/db_provider.dart';
-import 'package:library_app/data/stats_repository.dart';
+import 'package:library_app/providers/providers.dart';
 
 import 'package:library_app/pages/main_page.dart';
 
@@ -22,7 +21,7 @@ void main() {
 
   runApp(LibraryApp(
     bookRepository: bookRepository,
-    statsRepository: statsRepository,
+    statsRepository: statsRepository
   ));
 }
 
@@ -53,7 +52,7 @@ class LibraryApp extends StatelessWidget {
           BlocProvider<StatsBloc>(
             builder: (context) => StatsBloc(statsRepository)
             ..dispatch(LoadYearStatsEvent()),
-          ),
+          )
         ],
         child: MainPage(),
       ),

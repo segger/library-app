@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:library_app/blocs/export.dart';
 
 import 'package:library_app/widgets/load_components.dart';
@@ -40,6 +39,9 @@ class _ExportYearFormState extends State<ExportYearForm> {
               }
               if (state is ExportYearsLoaded) {
                 return _exportForm(state);
+              }
+              if (state is YearExported) {
+                return Loading();
               }
             }
           ),
@@ -97,6 +99,8 @@ class _ExportYearFormState extends State<ExportYearForm> {
   _submit() {
     if(_formKey.currentState.validate()) {
       print('exporting...');
+      _bloc.dispatch(ExportYearEvent(year: _selectedYear));
+      Navigator.pop(context);
     }
   }
 }

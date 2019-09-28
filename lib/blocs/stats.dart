@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 
-import 'package:library_app/data/stats_repository.dart';
 import 'package:library_app/models/stats.dart';
+import 'package:library_app/data/stats_repository.dart';
 
 abstract class StatsState {}
 

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:library_app/blocs/blocs.dart';
+import 'package:library_app/data/repositories.dart';
+import 'package:library_app/data/stats_repository.dart';
+import 'package:library_app/providers/providers.dart';
 import 'package:library_app/views/add_book_form.dart';
 import 'package:library_app/views/export_year_form.dart';
 
@@ -79,10 +82,13 @@ class _MenuButtonState extends State<MenuButton>
 
   _exportDialog() {
     _toggleMenu();
+    StatsRepository statsRepository = StatsRepository(statsProvider: DBProvider.instance);
+    StorageRepository storageRepository = StorageRepository(storageProvider: StorageProvider.instance);
+
     Navigator.push(context, MaterialPageRoute(
       builder: (context) {
         return BlocProvider<ExportBloc>(
-          builder: (context) => ExportBloc()..dispatch(LoadExportYearsEvent()),
+          builder: (context) => ExportBloc(statsRepository, storageRepository)..dispatch(LoadExportYearsEvent()),
           child: ExportYearForm(),
         );
       }

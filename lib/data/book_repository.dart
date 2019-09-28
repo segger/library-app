@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
-import 'package:library_app/data/db_constants.dart';
-import 'package:library_app/data/db_provider.dart';
+import 'package:library_app/providers/db_constants.dart';
+import 'package:library_app/providers/db_provider.dart';
 
 import 'package:library_app/models/book.dart';
 
