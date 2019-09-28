@@ -68,6 +68,13 @@ class DBProvider {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getDistinct(String table, String column) async {
+    final db = await database;
+    List<String> columns = [column];
+    List<Map<String, dynamic>> res = await db.query(table, distinct: true, columns: columns);
+    return res;
+  }
+
   Tuple2<String, List<dynamic>> whereBuilder(Map<String, dynamic> where) {
     String whereStr = '';
     List<dynamic> whereArgs = [];

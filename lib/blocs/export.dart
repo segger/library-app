@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 
-import 'package:library_app/data/repositories.dart';
+import 'package:library_app/data/export_service.dart';
 
 abstract class ExportState {}
 
@@ -20,11 +20,10 @@ class ExportYearEvent extends ExportEvent {
 }
 
 class ExportBloc extends Bloc<ExportEvent, ExportState> {
-  final StatsRepository statsRepository;
-  final StorageRepository storageRepository;
+  final ExportService exportService;
 
-  ExportBloc(this.statsRepository, this.storageRepository)
-    : assert(statsRepository != null, storageRepository != null);
+  ExportBloc(this.exportService)
+    : assert(exportService != null);
 
   @override
   ExportState get initialState => ExportInit();
@@ -32,12 +31,12 @@ class ExportBloc extends Bloc<ExportEvent, ExportState> {
   @override
   Stream<ExportState> mapEventToState(ExportEvent event) async* {
     if (event is LoadExportYearsEvent) {
-      List<int> exportYears = [2018, 2019];
+      List<int> exportYears = await exportService.getYears();
       yield ExportYearsLoaded(exportYears: exportYears);
     }
     if (event is ExportYearEvent) {
-      print(event.year);
-      await storageRepository.writeStats();
+      await exportService.writeStats(event.year);
+      // await exportService.shareStats();
       yield YearExported();
     }
   }

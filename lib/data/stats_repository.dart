@@ -42,4 +42,13 @@ class StatsRepository {
       statsProvider.update(tbl, newStats.asMap());
     }
   }
+
+  Future<List<int>> getYears() async {
+    List<Map<String, dynamic>> dbList = await statsProvider.getDistinct(
+      tbl, "year"
+    );
+    return dbList.isEmpty ? [] : List.generate(dbList.length, (i) {
+      return dbList[i]['year'];
+    });
+  }
 }
