@@ -87,7 +87,6 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
       }
     }
     if (event is EditBookLibraryEvent) {
-      /*
       if (currentState is LibraryLoaded) {
         await bookRepository.editBook(event.book);
         LibraryLoaded loadedState = (currentState as LibraryLoaded);
@@ -96,7 +95,7 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
           List.from(loadedState.books)
           ..replaceRange(idx, 1, [event.book]);
         yield LibraryLoaded(updatedLibrary, loadedState.sortOrder, hasReachedMax: false);
-      }*/
+      }
     }
     if (event is SortLibraryEvent) {
       if (currentState is LibraryLoaded) {

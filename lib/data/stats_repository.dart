@@ -43,6 +43,15 @@ class StatsRepository {
     }
   }
 
+  Future<void> decrease(StatsEntity stats) async {
+    print('descrease $stats');
+    var searchParams = stats.dateAsSearchParams();
+    List<Map<String, dynamic>> dbList = await statsProvider.getListByCols(tbl, searchParams);
+    StatsEntity newStats = StatsEntity.of(dbList[0]);
+    newStats.count--;
+    statsProvider.update(tbl, newStats.asMap());
+  }
+
   Future<List<int>> getYears() async {
     List<Map<String, dynamic>> dbList = await statsProvider.getDistinct(
       tbl, "year"

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:library_app/blocs/library.dart';
+
+import 'package:library_app/blocs/blocs.dart';
+
 import 'package:library_app/models/book.dart';
-import 'package:library_app/views/add_book_form.dart';
+import 'package:library_app/views/book_form.dart';
 
 import 'package:library_app/widgets/load_components.dart';
 
@@ -14,14 +16,16 @@ class BooksPage extends StatefulWidget {
 }
 
 class _BooksPageState extends State<BooksPage> {
-  LibraryBloc _bloc;
+  LibraryBloc _libraryBloc;
+  StatsBloc _statsBloc;
 
   final _scrollController = ScrollController();
   final _scrollThreashold = 200.0;
 
   @override
   void initState() {
-    _bloc = BlocProvider.of<LibraryBloc>(context);
+    _libraryBloc = BlocProvider.of<LibraryBloc>(context);
+    _statsBloc = BlocProvider.of<StatsBloc>(context);
     _scrollController.addListener(_onScroll);
     super.initState();
   }
@@ -36,14 +40,14 @@ class _BooksPageState extends State<BooksPage> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.position.pixels;
     if (maxScroll - currentScroll <= _scrollThreashold) {
-      _bloc.dispatch(LoadLibraryEvent());
+      _libraryBloc.dispatch(LoadLibraryEvent());
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-      bloc: _bloc,
+      bloc: _libraryBloc,
       builder: (BuildContext context, LibraryState state) {
         if (state is LibraryInit) {
           return Loading();
@@ -73,9 +77,11 @@ class _BooksPageState extends State<BooksPage> {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
-          builder: (context) => AddBookForm(
-            onSave: (book) {
-              print('UPDATE $book');
+          builder: (context) => BookForm(
+            onSave: (updatedBook) {
+              print('updatedBook $updatedBook');
+              _libraryBloc.dispatch(EditBookLibraryEvent(updatedBook));
+              _statsBloc.dispatch(EditBookStatsEvent(oldDate: book.date, newDate: updatedBook.date));
             },
             book: book
           )

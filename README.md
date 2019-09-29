@@ -9,6 +9,7 @@ A flutter app for my stuff
 * [] Delete
 
 #### data sqlite3
+`adb root` (Use API image)
 `adb shell`
 `sqlite3 Library.db`
 

@@ -6,17 +6,17 @@ import 'package:library_app/models/book.dart';
 
 typedef OnSaveCallback = Function(Book book);
 
-class AddBookForm extends StatefulWidget {
+class BookForm extends StatefulWidget {
   final OnSaveCallback onSave;
   final Book book;
 
-  AddBookForm({@required this.onSave, this.book});
+  BookForm({@required this.onSave, this.book});
 
   @override
-  _AddBookFormState createState() => _AddBookFormState();
+  _BookFormState createState() => _BookFormState();
 }
 
-class _AddBookFormState extends State<AddBookForm> {
+class _BookFormState extends State<BookForm> {
   final _formKey = GlobalKey<FormState>();
 
   Book book;

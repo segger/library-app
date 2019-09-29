@@ -6,7 +6,7 @@ import 'package:library_app/data/repositories.dart';
 import 'package:library_app/data/export_service.dart';
 import 'package:library_app/models/book.dart';
 import 'package:library_app/providers/providers.dart';
-import 'package:library_app/views/add_book_form.dart';
+import 'package:library_app/views/book_form.dart';
 import 'package:library_app/views/export_year_form.dart';
 
 class MenuButton extends StatefulWidget {
@@ -71,7 +71,7 @@ class _MenuButtonState extends State<MenuButton>
   _addNewBook() {
     _toggleMenu();
     Navigator.push(context, MaterialPageRoute(
-        builder: (context) => AddBookForm(
+        builder: (context) => BookForm(
           onSave: (book) {
             _libraryBloc.dispatch(AddBookLibraryEvent(book));
             _statsBloc.dispatch(AddBookStatsEvent(date: book.date));
