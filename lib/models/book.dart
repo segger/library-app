@@ -1,20 +1,19 @@
-import 'package:library_app/models/date.dart';
+import 'package:intl/intl.dart';
 
-export './date.dart';
 export './constants.dart';
 
 class Book {
   final int id;
   String title;
   String author;
-  ReadDate date;
+  DateTime date;
 
   Book({this.id, this.title, this.author, this.date});
 
   Map<String, dynamic> asMap() {
     return {
       "id": id,
-      "date": date.asLabel(),
+      "date": DateFormat('yyyy-MM-dd').format(date),
       "title": title,
       "author": author,
     };
@@ -23,9 +22,15 @@ class Book {
   static Book of(Map<String, dynamic> dbMap) {
     return Book(
         id: dbMap['id'],
-        date: ReadDate.of(dbMap['date']),
+        date: DateTime.parse(dbMap['date']),
         title: dbMap['title'],
         author: dbMap['author'],
       );
+  }
+
+  String dateAsLabel() {
+    String fMonth = (this.date.month < 10) ? "0${date.month}" : "${date.month}";
+    String fDay = (this.date.day < 10) ? '0${date.day}' : '${date.day}';
+    return '${date.year}-$fMonth-$fDay';
   }
 }

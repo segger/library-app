@@ -32,7 +32,7 @@ class StatsRepository {
   }
 
   Future<void> increase(StatsEntity stats) async {
-    var searchParams = stats.date.asSearchParams();
+    var searchParams = stats.dateAsSearchParams();
     List<Map<String, dynamic>> dbList = await statsProvider.getListByCols(tbl, searchParams);
     if(dbList.length == 0) {
       await statsProvider.insert(tbl, stats.asMap());

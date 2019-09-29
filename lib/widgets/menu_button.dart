@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_app/blocs/blocs.dart';
 import 'package:library_app/data/repositories.dart';
 import 'package:library_app/data/export_service.dart';
+import 'package:library_app/models/book.dart';
 import 'package:library_app/providers/providers.dart';
 import 'package:library_app/views/add_book_form.dart';
 import 'package:library_app/views/export_year_form.dart';
@@ -74,7 +75,8 @@ class _MenuButtonState extends State<MenuButton>
           onSave: (book) {
             _libraryBloc.dispatch(AddBookLibraryEvent(book));
             _statsBloc.dispatch(AddBookStatsEvent(date: book.date));
-          }
+          },
+          book: Book()
         )
       )
     );

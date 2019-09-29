@@ -1,6 +1,6 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 import 'package:library_app/models/book.dart';
 
@@ -8,8 +8,9 @@ typedef OnSaveCallback = Function(Book book);
 
 class AddBookForm extends StatefulWidget {
   final OnSaveCallback onSave;
+  final Book book;
 
-  AddBookForm({@required this.onSave});
+  AddBookForm({@required this.onSave, this.book});
 
   @override
   _AddBookFormState createState() => _AddBookFormState();
@@ -17,18 +18,22 @@ class AddBookForm extends StatefulWidget {
 
 class _AddBookFormState extends State<AddBookForm> {
   final _formKey = GlobalKey<FormState>();
-  final _dateController = TextEditingController();
-  final _titleController = TextEditingController();
-  final _authorController = TextEditingController();
+
+  Book book;
 
   void _save() {
-    var newBook = Book(
-      date: ReadDate.of(_dateController.value.text),
-      title: _titleController.value.text,
-      author: _authorController.value.text,
-    );
-    widget.onSave(newBook);
+    _formKey.currentState.save();
+    widget.onSave(book);
     Navigator.pop(context);
+  }
+
+
+  @override
+  void initState() {
+    // var dateLabel = widget.book.date != null ? widget.book.date.asLabel() : '';
+    book = widget.book;
+    print(book);
+    super.initState();
   }
 
   @override
@@ -76,10 +81,17 @@ class _AddBookFormState extends State<AddBookForm> {
   }
 
   Widget _date() {
-    return DateTimePickerFormField(
+    return DateTimeField(
       format: DateFormat("yyyy-MM-dd"),
-      inputType: InputType.date,
-      controller: _dateController,
+      onShowPicker: (context, currentValue) {
+        return showDatePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2100),
+          initialDate: currentValue ?? DateTime.now(),
+        );
+      },
+      initialValue: book.date,
       validator: (value) {
         if(value == null) {
           return 'No date';
@@ -88,12 +100,13 @@ class _AddBookFormState extends State<AddBookForm> {
       decoration: InputDecoration(
         labelText: 'Date'
       ),
+      onSaved: (value) => book.date = value,
     );
   }
 
   Widget _title() {
     return TextFormField(
-      controller: _titleController,
+      initialValue: book.title,
       validator: (value) {
         if(value.isEmpty) {
           return 'No title';
@@ -102,12 +115,13 @@ class _AddBookFormState extends State<AddBookForm> {
       decoration: InputDecoration(
           labelText: 'Title'
       ),
+      onSaved: (value) => book.title = value,
     );
   }
 
   Widget _author() {
     return TextFormField(
-      controller: _authorController,
+      initialValue: book.author,
       validator: (value) {
         if(value.isEmpty) {
           return 'No author';
@@ -116,6 +130,7 @@ class _AddBookFormState extends State<AddBookForm> {
       decoration: InputDecoration(
         labelText: 'Author'
       ),
+      onSaved: (value) => book.author = value,
     );
   }
 }

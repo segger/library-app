@@ -1,10 +1,6 @@
-import 'package:library_app/models/date.dart';
-
-export './date.dart';
-
 class StatsEntity {
   final int id;
-  final ReadDate date;
+  final DateTime date;
   int count;
 
   StatsEntity({this.id, this.date, this.count});
@@ -22,13 +18,21 @@ class StatsEntity {
   static StatsEntity of(Map<String, dynamic> dbMap) {
     return StatsEntity(
       id: dbMap['id'],
-      date: ReadDate(
-        year: dbMap['year'],
-        month: dbMap['month'],
-        day: dbMap['day']
+      date: DateTime(
+        dbMap['year'],
+        dbMap['month'],
+        dbMap['day']
       ),
       count: dbMap['count']
     );
+  }
+
+  Map<String, int> dateAsSearchParams() {
+    return {
+      "year": date.year,
+      "month": date.month,
+      "day": date.day
+    };
   }
 }
 

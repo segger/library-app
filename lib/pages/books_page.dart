@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:library_app/blocs/library.dart';
 import 'package:library_app/models/book.dart';
+import 'package:library_app/views/add_book_form.dart';
 
 import 'package:library_app/widgets/load_components.dart';
 
@@ -68,10 +69,23 @@ class _BooksPageState extends State<BooksPage> {
   }
 
   Widget _libraryItem(Book book) {
-    return Card(
-      child: ListTile(
-        title: Text('${book.title} - ${book.author}'),
-          subtitle: book.date != null ? Text(book.date.asLabel()) : Text(''),
+    
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => AddBookForm(
+            onSave: (book) {
+              print('UPDATE $book');
+            },
+            book: book
+          )
+        ));
+      },
+      child: Card(
+        child: ListTile(
+          title: Text('${book.title} - ${book.author}'),
+          subtitle: book.date != null ? Text(book.dateAsLabel()) : Text(''),
+        ),
       ),
     );
   }

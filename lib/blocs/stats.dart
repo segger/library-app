@@ -16,7 +16,7 @@ abstract class StatsEvent {}
 
 class LoadYearStatsEvent extends StatsEvent {}
 class AddBookStatsEvent extends StatsEvent {
-  final ReadDate date;
+  final DateTime date;
   AddBookStatsEvent({this.date});
 }
 class LoadMonthStatsEvent extends StatsEvent {

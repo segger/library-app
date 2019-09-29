@@ -34,4 +34,8 @@ class BookRepository {
   addBook(Book book) async {
     await bookProvider.insert(DBConstants.BOOKS_TABLE, book.asMap());
   }
+
+  editBook(Book book) async {
+    await bookProvider.update(DBConstants.BOOKS_TABLE, book.asMap());
+  }
 }
