@@ -36,7 +36,7 @@ class ExportBloc extends Bloc<ExportEvent, ExportState> {
     }
     if (event is ExportYearEvent) {
       await exportService.writeStats(event.year);
-      // await exportService.shareStats();
+      await exportService.shareStats(event.year);
       yield YearExported();
     }
   }

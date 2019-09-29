@@ -4,7 +4,7 @@ A flutter app for my stuff
 
 ## Todo
 * [x] Sort order
-* [] Export
+* [x] Export stats
 * [] Edit
 * [] Delete
 

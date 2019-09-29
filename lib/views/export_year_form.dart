@@ -98,7 +98,6 @@ class _ExportYearFormState extends State<ExportYearForm> {
 
   _submit() {
     if(_formKey.currentState.validate()) {
-      print('exporting...');
       _bloc.dispatch(ExportYearEvent(year: _selectedYear));
       Navigator.pop(context);
     }
