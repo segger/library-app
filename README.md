@@ -19,3 +19,4 @@ A flutter app for my stuff
 
 #### Appcenter
 * https://www.rocksolidknowledge.com/articles/using-appcenter-for-flutter-projects
+[] Connect crash report, etc
