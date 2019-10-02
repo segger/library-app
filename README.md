@@ -20,3 +20,6 @@ A flutter app for my stuff
 #### Appcenter
 * https://www.rocksolidknowledge.com/articles/using-appcenter-for-flutter-projects
 [] Connect crash report, etc
+
+#### ios
+* https://medium.com/flutter-community/developing-and-debugging-flutter-apps-for-ios-without-a-mac-8d362a8ec667
