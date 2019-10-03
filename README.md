@@ -19,6 +19,7 @@ A flutter app for my stuff
 
 #### Appcenter
 * https://www.rocksolidknowledge.com/articles/using-appcenter-for-flutter-projects
+* https://buildflutter.com/deploying-flutter-apps-via-appcenter/
 [] Connect crash report, etc
 
 #### ios
