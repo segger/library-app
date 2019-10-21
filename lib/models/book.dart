@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 export './constants.dart';
 
 class Book {
@@ -13,7 +11,9 @@ class Book {
   Map<String, dynamic> asMap() {
     return {
       "id": id,
-      "date": DateFormat('yyyy-MM-dd').format(date),
+      "year": date.year,
+      "month": date.month,
+      "day": date.day,
       "title": title,
       "author": author,
     };
@@ -22,7 +22,11 @@ class Book {
   static Book of(Map<String, dynamic> dbMap) {
     return Book(
         id: dbMap['id'],
-        date: DateTime.parse(dbMap['date']),
+        date: DateTime(
+          dbMap['year'],
+          dbMap['month'],
+          dbMap['day']
+        ),
         title: dbMap['title'],
         author: dbMap['author'],
       );

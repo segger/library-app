@@ -7,7 +7,7 @@ import 'package:library_app/models/stats.dart';
 
 class StatsRepository {
   final DBProvider statsProvider;
-  final String tbl = DBConstants.STATS_TABLE;
+  final String tbl = DBConstants.BOOKS_TABLE;
 
   StatsRepository({@required this.statsProvider})
     : assert(statsProvider != null);
@@ -29,27 +29,6 @@ class StatsRepository {
     return dbList.isEmpty ? [] : List.generate(dbList.length, (i) {
       return MonthStats.of(dbList[i]);
     });
-  }
-
-  Future<void> increase(StatsEntity stats) async {
-    var searchParams = stats.dateAsSearchParams();
-    List<Map<String, dynamic>> dbList = await statsProvider.getListByCols(tbl, searchParams);
-    if(dbList.length == 0) {
-      await statsProvider.insert(tbl, stats.asMap());
-    } else {
-      StatsEntity newStats = StatsEntity.of(dbList[0]);
-      newStats.count++;
-      statsProvider.update(tbl, newStats.asMap());
-    }
-  }
-
-  Future<void> decrease(StatsEntity stats) async {
-    print('descrease $stats');
-    var searchParams = stats.dateAsSearchParams();
-    List<Map<String, dynamic>> dbList = await statsProvider.getListByCols(tbl, searchParams);
-    StatsEntity newStats = StatsEntity.of(dbList[0]);
-    newStats.count--;
-    statsProvider.update(tbl, newStats.asMap());
   }
 
   Future<List<int>> getYears() async {

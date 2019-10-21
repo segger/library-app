@@ -30,17 +30,11 @@ class DBProvider {
     await db.execute(
         "CREATE TABLE ${DBConstants.BOOKS_TABLE} ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-        "${DBConstants.BOOKS_COL_DATE} TEXT,"
-        "${DBConstants.BOOKS_COL_TITLE} TEXT,"
-        "${DBConstants.BOOKS_COL_AUTHOR} TEXT)"
-    );
-    await db.execute(
-      "CREATE TABLE ${DBConstants.STATS_TABLE} ("
-        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
         "year INT,"
         "month INT,"
         "day INT,"
-        "count INT)"
+        "${DBConstants.BOOKS_COL_TITLE} TEXT,"
+        "${DBConstants.BOOKS_COL_AUTHOR} TEXT)"
     );
   }
 
@@ -107,13 +101,13 @@ class DBProvider {
 
   Future<List<Map<String, dynamic>>> getListGroupBy(String table, String groupBy) async {
     final db = await database;
-    List<String> columns = [groupBy, "sum(count) as tot"];
+    List<String> columns = [groupBy, "count(*) as tot"];
     return db.query(table, columns: columns, groupBy: groupBy);
   }
 
   Future<List<Map<String, dynamic>>> getListGroupByWhere(String table, String groupBy, Map<String, dynamic> where) async {
     final db = await database;
-    List<String> columns = [groupBy, "sum(count) as tot"];
+    List<String> columns = [groupBy, "count(*) as tot"];
     Tuple2 whereTuple = whereBuilder(where);
     return db.query(table, columns: columns, where: whereTuple.item1, whereArgs: whereTuple.item2, groupBy: groupBy);
   }
