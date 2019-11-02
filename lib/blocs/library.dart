@@ -93,7 +93,7 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
         int idx = loadedState.books.indexWhere((book) => book.id == event.book.id);
         final List<Book> updatedLibrary =
           List.from(loadedState.books)
-          ..replaceRange(idx, 1, [event.book]);
+          ..replaceRange(idx, idx+1, [event.book]);
         yield LibraryLoaded(updatedLibrary, loadedState.sortOrder, hasReachedMax: false);
       }
     }
