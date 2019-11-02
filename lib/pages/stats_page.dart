@@ -35,6 +35,7 @@ class _StatsPageState extends State<StatsPage> {
         if (state is StatsLoaded) {
           return _statsList(state);
         }
+        return null;
       }
     );
   }

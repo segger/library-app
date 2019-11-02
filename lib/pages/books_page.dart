@@ -58,6 +58,7 @@ class _BooksPageState extends State<BooksPage> {
         if (state is LibraryLoaded) {
           return _libraryList(state);
         }
+        return null;
       },
     );
   }

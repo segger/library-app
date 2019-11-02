@@ -43,6 +43,7 @@ class _ExportYearFormState extends State<ExportYearForm> {
               if (state is YearExported) {
                 return Loading();
               }
+              return null;
             }
           ),
         ),
@@ -71,6 +72,7 @@ class _ExportYearFormState extends State<ExportYearForm> {
         if (value == null) {
           return 'No year selected';
         }
+        return '';
       },
       items: state.exportYears.map((int value) {
         return DropdownMenuItem(
