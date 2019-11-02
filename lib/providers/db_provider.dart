@@ -62,10 +62,10 @@ class DBProvider {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getDistinct(String table, String column) async {
+  Future<List<Map<String, dynamic>>> getOrderedDistinct(String table, String column) async {
     final db = await database;
     List<String> columns = [column];
-    List<Map<String, dynamic>> res = await db.query(table, distinct: true, columns: columns);
+    List<Map<String, dynamic>> res = await db.query(table, distinct: true, orderBy: column, columns: columns);
     return res;
   }
 

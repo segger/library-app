@@ -32,7 +32,7 @@ class StatsRepository {
   }
 
   Future<List<int>> getYears() async {
-    List<Map<String, dynamic>> dbList = await statsProvider.getDistinct(
+    List<Map<String, dynamic>> dbList = await statsProvider.getOrderedDistinct(
       tbl, "year"
     );
     return dbList.isEmpty ? [] : List.generate(dbList.length, (i) {
