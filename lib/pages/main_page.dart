@@ -46,7 +46,11 @@ class _MainPageState extends State<MainPage> {
           body: activeTab == NavTabs.books ? BooksPage() : StatsPage(),
           bottomNavigationBar: TabSelector(
             activeTab: activeTab,
-            onTabSelected: (tab) => _tabBloc.dispatch(ChangeTabEvent(tab: tab)),
+            onTabSelected: (tab) {
+              _tabBloc.dispatch(ChangeTabEvent(tab: tab));
+              if(tab == NavTabs.books) _libraryBloc.dispatch(LoadLibraryEvent());
+              if(tab == NavTabs.stats) _statsBloc.dispatch(LoadYearStatsEvent());
+            },
           ),
           floatingActionButton: MenuButton(),
         );

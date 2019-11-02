@@ -17,6 +17,7 @@ class BooksPage extends StatefulWidget {
 
 class _BooksPageState extends State<BooksPage> {
   LibraryBloc _libraryBloc;
+  StatsBloc _statsBloc;
 
   final _scrollController = ScrollController();
   final _scrollThreashold = 200.0;
@@ -24,6 +25,7 @@ class _BooksPageState extends State<BooksPage> {
   @override
   void initState() {
     _libraryBloc = BlocProvider.of<LibraryBloc>(context);
+    _statsBloc = BlocProvider.of<StatsBloc>(context);
     _scrollController.addListener(_onScroll);
     super.initState();
   }
@@ -78,6 +80,7 @@ class _BooksPageState extends State<BooksPage> {
           builder: (context) => BookForm(
             onSave: (updatedBook) {
               _libraryBloc.dispatch(EditBookLibraryEvent(updatedBook));
+              _statsBloc.dispatch(LoadYearStatsEvent());
             },
             book: book
           )
