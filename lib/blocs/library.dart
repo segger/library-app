@@ -40,6 +40,10 @@ class EditBookLibraryEvent extends LibraryEvent {
   final Book book;
   EditBookLibraryEvent(this.book);
 }
+class DeleteBookLibraryEvent extends LibraryEvent {
+  final Book book;
+  DeleteBookLibraryEvent(this.book);
+}
 
 class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
   final BookRepository bookRepository;
@@ -76,11 +80,11 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
     }
     if (event is AddBookLibraryEvent) {
       if (currentState is LibraryLoaded) {
-        await bookRepository.addBook(event.book);
+        Book newBook = await bookRepository.addBook(event.book);
         LibraryLoaded loadedState = (currentState as LibraryLoaded);
         final List<Book> updatedLibrary =
           List.from(loadedState.books)
-          ..insert(0, event.book);
+          ..insert(0, newBook);
         yield LibraryLoaded(updatedLibrary, loadedState.sortOrder, hasReachedMax: false);
       } else {
         yield LibraryError();
@@ -94,6 +98,17 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
         final List<Book> updatedLibrary =
           List.from(loadedState.books)
           ..replaceRange(idx, idx+1, [event.book]);
+        yield LibraryLoaded(updatedLibrary, loadedState.sortOrder, hasReachedMax: false);
+      }
+    }
+    if (event is DeleteBookLibraryEvent) {
+      if (currentState is LibraryLoaded) {
+        await bookRepository.deleteBook(event.book);
+        LibraryLoaded loadedState = (currentState as LibraryLoaded);
+        int idx = loadedState.books.indexWhere((book) => book.id == event.book.id);
+        final List<Book> updatedLibrary =
+          List.from(loadedState.books)
+          ..removeAt(idx);
         yield LibraryLoaded(updatedLibrary, loadedState.sortOrder, hasReachedMax: false);
       }
     }

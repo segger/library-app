@@ -31,11 +31,16 @@ class BookRepository {
     });
   }
 
-  addBook(Book book) async {
-    await bookProvider.insert(DBConstants.BOOKS_TABLE, book.asMap());
+  Future<Book> addBook(Book book) async {
+    int id = await bookProvider.insert(DBConstants.BOOKS_TABLE, book.asMap());
+    return Book(id: id, title: book.title, author: book.author, date: book.date);
   }
 
   editBook(Book book) async {
     await bookProvider.update(DBConstants.BOOKS_TABLE, book.asMap());
+  }
+
+  deleteBook(Book book) async {
+    await bookProvider.delete(DBConstants.BOOKS_TABLE, book.asMap());
   }
 }

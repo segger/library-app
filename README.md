@@ -5,8 +5,16 @@ A flutter app for my stuff
 ## Todo
 * [x] Sort order
 * [x] Export stats
-* [] Edit
-* [] Delete
+   - [] Export full stats
+* [x] Edit
+* [x] Delete
+* [] Icon and splash
+
+### Features
+* [] States (to read, )
+* [] More data (rate, code, etc)
+* [] Backup/restore (dropbox, google)
+* [] Different types (listen, view)
 
 #### data sqlite3
 * `adb root` (Use API image)

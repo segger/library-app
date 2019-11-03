@@ -38,9 +38,9 @@ class DBProvider {
     );
   }
 
-  Future<void> insert(String table, Map<String, dynamic> object) async {
+  Future<int> insert(String table, Map<String, dynamic> object) async {
     final db = await database;
-    await db.insert(table, object);
+    return await db.insert(table, object);
   }
 
   Future<int> update(String table, Map<String, dynamic> object) async {
@@ -48,6 +48,14 @@ class DBProvider {
     String whereStr = 'id = ?';
     List<dynamic> whereArg = [object['id']];
     return await db.update(table, object, where: whereStr, whereArgs: whereArg);
+  }
+
+  Future<void> delete(String table, Map<String, dynamic> object) async {
+    print(object['id']);
+    final db = await database;
+    String whereStr = 'id = ?';
+    List<dynamic> whereArg = [object['id']];
+    return await db.delete(table, where: whereStr, whereArgs: whereArg);
   }
 
   Future<Map<String, dynamic>> getById(String table, int id) async {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -75,24 +76,42 @@ class _BooksPageState extends State<BooksPage> {
 
   Widget _libraryItem(Book book) {
     
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => BookForm(
-            onSave: (updatedBook) {
-              _libraryBloc.dispatch(EditBookLibraryEvent(updatedBook));
-              _statsBloc.dispatch(LoadYearStatsEvent());
-            },
-            book: book
-          )
-        ));
-      },
-      child: Card(
-        child: ListTile(
-          title: Text('${book.title} - ${book.author}'),
-          subtitle: book.date != null ? Text(book.dateAsLabel()) : Text(''),
-        ),
-      ),
+    return Slidable(
+      actionPane: SlidableBehindActionPane(),
+      child: _libraryItemCard(book),
+      secondaryActions: <Widget>[
+        IconSlideAction(
+          caption: 'Delete',
+          color: Colors.red,
+          icon: Icons.delete,
+          onTap: () {
+            _libraryBloc.dispatch(DeleteBookLibraryEvent(book));
+            _statsBloc.dispatch(LoadYearStatsEvent());
+          },
+        )
+      ],
     );
+  }
+
+  Widget _libraryItemCard(Book book) {
+    return GestureDetector(
+    onTap: () {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) => BookForm(
+          onSave: (updatedBook) {
+            _libraryBloc.dispatch(EditBookLibraryEvent(updatedBook));
+            _statsBloc.dispatch(LoadYearStatsEvent());
+          },
+          book: book
+        )
+      ));
+    },
+    child: Card(
+      child: ListTile(
+        title: Text('${book.title} - ${book.author}'),
+        subtitle: book.date != null ? Text(book.dateAsLabel()) : Text(''),
+      ),
+    ),
+  );
   }
 }
