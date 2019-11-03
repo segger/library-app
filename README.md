@@ -32,3 +32,6 @@ A flutter app for my stuff
 
 #### ios
 * https://medium.com/flutter-community/developing-and-debugging-flutter-apps-for-ios-without-a-mac-8d362a8ec667
+
+#### icons
+Icons made by [Freepik](https://www.flaticon.com/authors/freepik)
