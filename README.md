@@ -5,15 +5,16 @@ A flutter app for my stuff
 ## Todo
 * [x] Sort order
 * [x] Export stats
-   - [] Export full stats
+   - [/] Export full stats
+   - [] Import stats
 * [x] Edit
 * [x] Delete
 * [/] Icon
 
 ### Features
-* [] States (to read, )
-* [] More data (rate, code, etc)
 * [] Backup/restore (dropbox, google)
+* [] Types (serie, sound, rate, code, etc)
+* [] States (to read, home, e-lib, )
 * [] Different types (listen, view)
 
 #### data sqlite3
