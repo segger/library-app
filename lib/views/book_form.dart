@@ -32,7 +32,6 @@ class _BookFormState extends State<BookForm> {
   void initState() {
     // var dateLabel = widget.book.date != null ? widget.book.date.asLabel() : '';
     book = widget.book;
-    print(book);
     super.initState();
   }
 

@@ -19,6 +19,10 @@ class Book {
     };
   }
 
+  static Book from(int id, int year, int month, int day, String title, String author) {
+    return Book(id: id, date: DateTime(year, month, day), title: title, author: author);
+  }
+
   static Book of(Map<String, dynamic> dbMap) {
     return Book(
         id: dbMap['id'],

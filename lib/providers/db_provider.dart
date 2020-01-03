@@ -51,7 +51,6 @@ class DBProvider {
   }
 
   Future<void> delete(String table, Map<String, dynamic> object) async {
-    print(object['id']);
     final db = await database;
     String whereStr = 'id = ?';
     List<dynamic> whereArg = [object['id']];

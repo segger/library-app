@@ -3,6 +3,7 @@ import 'package:share/share.dart';
 
 import 'package:library_app/data/stats_repository.dart';
 import 'package:library_app/models/stats.dart';
+import 'package:library_app/models/book.dart';
 
 import 'package:library_app/providers/providers.dart';
 
@@ -21,26 +22,31 @@ class ExportService {
     String fileName = '$year.txt';
 
     List<MonthStats> stats = await statsRepository.getMonthStats(year);
-    String data = generateYearData(year, stats);
+    Map<int, List<dynamic>> books = await statsRepository.getBooks(year);
+    String data = generateYearData(year, stats, books);
     await storageProvider.writeFile(fileName, data);
   }
 
   Future<void> shareStats(int year) async {
     List<MonthStats> stats = await statsRepository.getMonthStats(year);
-    String data = generateYearData(year, stats);
+    Map<int, List<dynamic>> books = await statsRepository.getBooks(year);
+    String data = generateYearData(year, stats, books);
 
     Share.share(data);
   }
 
-  String generateYearData(int year, List<MonthStats> stats) {
+  String generateYearData(int year, List<MonthStats> stats, Map<int, List<dynamic>> books) {
     var yearTot = 0;
     var buffer = StringBuffer();
     stats.forEach((month) {
       yearTot += month.count;
-      buffer.write("== ${month.name}: (${month.count}) ==\n");
+      buffer.write("= ${month.name}: ${month.count} =\n");
+      books[month.month].forEach((book) {
+        buffer.write("${book.title} - ${book.author}\n");
+      });
     });
 
-    String data = "= $year: ($yearTot) =\n" + buffer.toString();
+    String data = "== $year: $yearTot ==\n" + buffer.toString();
     return data;
   }
 }

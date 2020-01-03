@@ -8,7 +8,7 @@ A flutter app for my stuff
    - [] Export full stats
 * [x] Edit
 * [x] Delete
-* [] Icon and splash
+* [/] Icon
 
 ### Features
 * [] States (to read, )
@@ -29,9 +29,6 @@ A flutter app for my stuff
 * https://www.rocksolidknowledge.com/articles/using-appcenter-for-flutter-projects
 * https://buildflutter.com/deploying-flutter-apps-via-appcenter/
 [] Connect crash report, etc
-
-#### ios
-* https://medium.com/flutter-community/developing-and-debugging-flutter-apps-for-ios-without-a-mac-8d362a8ec667
 
 #### icons
 Icons made by [Freepik](https://www.flaticon.com/authors/freepik)
