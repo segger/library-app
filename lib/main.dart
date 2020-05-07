@@ -40,6 +40,7 @@ class LibraryApp extends StatelessWidget {
         // This is the theme of your application.
         primarySwatch: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
       home: BlocProviderTree(
         blocProviders: [
           BlocProvider<NavTabsBloc>(
