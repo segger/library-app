@@ -27,9 +27,11 @@ class StatsRepository {
     List<Map<String, dynamic>> dbList = await statsProvider.getListGroupByWhere(
       tbl, "month", where
     );
-    return dbList.isEmpty ? [] : List.generate(dbList.length, (i) {
+    List<MonthStats> monthStatsList = dbList.isEmpty ? [] : List.generate(dbList.length, (i) {
       return MonthStats.of(dbList[i]);
     });
+    monthStatsList.sort((month1, month2) => month2.month - month1.month);
+    return monthStatsList;
   }
 
   Future<List<int>> getYears() async {
