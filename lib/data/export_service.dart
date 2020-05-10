@@ -3,7 +3,6 @@ import 'package:share/share.dart';
 
 import 'package:library_app/data/stats_repository.dart';
 import 'package:library_app/models/stats.dart';
-import 'package:library_app/models/book.dart';
 
 import 'package:library_app/providers/providers.dart';
 

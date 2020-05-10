@@ -95,6 +95,7 @@ class _BookFormState extends State<BookForm> {
         if(value == null) {
           return 'No date';
         }
+        return null;
       },
       decoration: InputDecoration(
         labelText: 'Date'
@@ -110,6 +111,7 @@ class _BookFormState extends State<BookForm> {
         if(value.isEmpty) {
           return 'No title';
         }
+        return null;
       },
       decoration: InputDecoration(
           labelText: 'Title'
@@ -125,6 +127,7 @@ class _BookFormState extends State<BookForm> {
         if(value.isEmpty) {
           return 'No author';
         }
+        return null;
       },
       decoration: InputDecoration(
         labelText: 'Author'
