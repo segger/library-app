@@ -4,6 +4,7 @@ A flutter app for my stuff
 
 ## Todo
 * [x] Sort order
+   - [] Date reversed
 * [x] Export stats
    - [/] Export full stats
    - [] Import stats
@@ -16,6 +17,7 @@ A flutter app for my stuff
 * [] Types (serie, sound, rate, code, etc)
 * [] States (to read, home, e-lib, )
 * [] Different types (listen, view)
+* [] Search
 
 #### data sqlite3
 * `adb root` (Use API image)

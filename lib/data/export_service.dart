@@ -43,9 +43,10 @@ class ExportService {
       books[month.month].forEach((book) {
         buffer.write("${book.title} - ${book.author}\n");
       });
+      buffer.write("\n");
     });
 
-    String data = "== $year: $yearTot ==\n" + buffer.toString();
+    String data = "== $year: $yearTot ==\n\n" + buffer.toString();
     return data;
   }
 }
