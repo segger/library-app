@@ -17,9 +17,7 @@ class TabSelector extends StatelessWidget {
           icon: Icon(
             tab == NavTabs.books ? Icons.list : Icons.show_chart,
           ),
-          title: Text(
-            tab == NavTabs.books ? 'Books' : 'Stats'
-          ),
+          label: tab == NavTabs.books ? 'Books' : 'Stats',
         );
       }).toList(),
     );
