@@ -129,7 +129,7 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
           case SortOrder.date:
           default:
             loadedState.books.sort((a, b) {
-              return a.date.compareTo(b.date);
+              return b.date.compareTo(a.date);
             });
             break;
         }

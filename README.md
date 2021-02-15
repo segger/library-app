@@ -4,7 +4,7 @@ A flutter app for my stuff
 
 ## Todo
 * [x] Sort order
-   - [] Date reversed
+   - [x] Date reversed
 * [x] Export stats
    - [/] Export full stats
    - [] Import stats

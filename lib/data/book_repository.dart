@@ -19,7 +19,7 @@ class BookRepository {
         return DBConstants.BOOKS_COL_AUTHOR;
       case SortOrder.date:
       default:
-        return "year, month, day desc";
+        return "year desc, month desc, day desc";
     }
   }
 
