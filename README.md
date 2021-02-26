@@ -8,6 +8,8 @@ A flutter app for my stuff
 * [x] Export stats
    - [/] Export full stats
    - [] Import stats
+     - [] Verify file
+     - [] Confirm import
 * [x] Edit
 * [x] Delete
 * [/] Icon

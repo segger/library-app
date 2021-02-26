@@ -1,16 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:library_app/blocs/export.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:library_app/blocs/import_export.dart';
 
 import 'package:library_app/widgets/load_components.dart';
 
-class ExportYearForm extends StatefulWidget {
+class ImportExportYearForm extends StatefulWidget {
   @override
-  _ExportYearFormState createState() => _ExportYearFormState();
+  _ImportExportYearFormState createState() => _ImportExportYearFormState();
 }
 
-class _ExportYearFormState extends State<ExportYearForm> {
-  ExportBloc _bloc;
+class _ImportExportYearFormState extends State<ImportExportYearForm> {
+  ImportExportBloc _bloc;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -19,21 +22,21 @@ class _ExportYearFormState extends State<ExportYearForm> {
   @override
   void initState() {
     _selectedYear = null;
-    _bloc = BlocProvider.of<ExportBloc>(context);
+    _bloc = BlocProvider.of<ImportExportBloc>(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Export"),),
+      appBar: AppBar(title: Text("Import/Export"),),
       body: Form(
         key: _formKey,
         child: Container(
           margin: EdgeInsets.all(20.0),
           child: BlocBuilder(
             bloc: _bloc,
-            builder: (BuildContext context, ExportState state) {
+            builder: (BuildContext context, ImportExportState state) {
               if (state is ExportInit) {
                 return Loading();
               }
@@ -41,6 +44,23 @@ class _ExportYearFormState extends State<ExportYearForm> {
                 return _exportForm(state);
               }
               if (state is YearExported) {
+                return Loading();
+              }
+              if (state is ImportFileValidated) {
+                return AlertDialog(
+                  title: Text('Alert'),
+                  actions: [
+                    FlatButton(
+                      child: Text('Ok'),
+                      onPressed: () {
+                        _bloc.dispatch(ImportFileEvent());
+                      },
+                    ),
+                  ],
+                );
+              }
+              if (state is FileImported) {
+                _bloc.dispatch(LoadExportYearsEvent());
                 return Loading();
               }
               return null;
@@ -54,6 +74,10 @@ class _ExportYearFormState extends State<ExportYearForm> {
   Widget _exportForm(ExportYearsLoaded state) {
     return Column(
       children: <Widget>[
+        _importButton(),
+        Divider(
+          color: Colors.black,
+        ),
         _yearDropdown(state),
         _submitButton(),
       ],
@@ -84,6 +108,29 @@ class _ExportYearFormState extends State<ExportYearForm> {
         labelText: 'Year'
       ),
     );
+  }
+
+  Widget _importButton() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
+      child: RaisedButton(
+        child: Text('Import'),
+        color: Colors.blue,
+        onPressed: () {
+          _filePick();
+        },
+      ),
+    );
+  }
+
+  _filePick() async {
+    FilePickerResult result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      File file = File(result.files.single.path);
+      print("FILE: " + file.toString());
+      // String input = await file.readAsString();
+      _bloc.dispatch(ImportFileValidateEvent(file: file));
+    }
   }
 
   Widget _submitButton() {
