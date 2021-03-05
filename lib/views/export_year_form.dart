@@ -16,8 +16,8 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
   ImportExportBloc _bloc;
 
   final _formKey = GlobalKey<FormState>();
-
   int _selectedYear;
+  File _importFile;
 
   @override
   void initState() {
@@ -47,17 +47,7 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
                 return Loading();
               }
               if (state is ImportFileValidated) {
-                return AlertDialog(
-                  title: Text('Alert'),
-                  actions: [
-                    FlatButton(
-                      child: Text('Ok'),
-                      onPressed: () {
-                        _bloc.dispatch(ImportFileEvent());
-                      },
-                    ),
-                  ],
-                );
+                return _importAlert(state.isValidLibraryFile);
               }
               if (state is FileImported) {
                 _bloc.dispatch(LoadExportYearsEvent());
@@ -79,7 +69,7 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
           color: Colors.black,
         ),
         _yearDropdown(state),
-        _submitButton(),
+        _exportButton(),
       ],
     );
   }
@@ -127,28 +117,63 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
     FilePickerResult result = await FilePicker.platform.pickFiles();
     if (result != null) {
       File file = File(result.files.single.path);
-      print("FILE: " + file.toString());
-      // String input = await file.readAsString();
+      _importFile = file;
       _bloc.dispatch(ImportFileValidateEvent(file: file));
     }
   }
 
-  Widget _submitButton() {
+  Widget _exportButton() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16.0),
       child: RaisedButton(
         child: Text('Export'),
         color: Colors.blue,
         disabledColor: Colors.black38,
-        onPressed: _selectedYear == null ? null : _submit,
+        onPressed: _selectedYear == null ? null : _export,
       ),
     );
   }
 
-  _submit() {
+  _export() {
     if(_formKey.currentState.validate()) {
       _bloc.dispatch(ExportYearEvent(year: _selectedYear));
       Navigator.pop(context);
+    }
+  }
+
+  Widget _importAlert(bool isValidLibraryFile) {
+    FlatButton import = FlatButton(
+      child: Text('Import'),
+      onPressed: () {
+        _bloc.dispatch(ImportFileEvent(file: _importFile));
+      },
+    );
+    FlatButton cancel = FlatButton(
+      child: Text('Cancel'),
+      onPressed: () {
+        _bloc.dispatch(LoadExportYearsEvent());
+      },
+    );
+
+    List<Widget> alertActions = [];
+    if (isValidLibraryFile) {
+      alertActions.add(import);
+    }
+    alertActions.add(cancel);
+
+    AlertDialog alert = AlertDialog(
+      title: Text('File import'),
+      content: _alertDescription(isValidLibraryFile),
+      actions: alertActions,
+    );
+    return alert;
+  }
+
+  Widget _alertDescription(bool isValidLibraryFile) {
+    if (isValidLibraryFile) {
+      return Text('File is valid, do you want to import it?');
+    } else {
+      return Text('File is not in a valid format.');
     }
   }
 }

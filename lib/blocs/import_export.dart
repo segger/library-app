@@ -29,7 +29,10 @@ class ImportFileValidateEvent extends ImportExportEvent {
   final File file;
   ImportFileValidateEvent({this.file});
 }
-class ImportFileEvent extends ImportExportEvent {}
+class ImportFileEvent extends ImportExportEvent {
+  final File file;
+  ImportFileEvent({this.file});
+}
 
 class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
   final ExportService exportService;
@@ -56,6 +59,8 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
       yield ImportFileValidated(isValidLibraryFile: true);
     }
     if (event is ImportFileEvent) {
+      String input = await event.file.readAsString();
+      print(input);
       // await importService.importFile();
       yield FileImported();
     }
