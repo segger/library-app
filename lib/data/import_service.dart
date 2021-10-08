@@ -18,8 +18,6 @@ class ImportService {
   }
 
   Future<void> importFile(File file) async {
-    print('import file');
-
     String input = await file.readAsString();
     List<Book> bookList = parser.addBooks(input);
     bookList.forEach((book) => print(book.asMap().toString()));
@@ -36,38 +34,63 @@ class ImportFileParser {
     return books.isNotEmpty;
   }
 
+  List<Book> addBooks(String input) {
+    return parse(input);
+  }
+
+  bool _isDateInfo(String row) {
+    RegExp regexp = new RegExp(r"\d{4}-\d{2}-\d{2}");
+    return regexp.hasMatch(row);
+  }
+
   List<Book> parse(String input, {validate=false}) {
     List<Book> bookList = [];
     List<String> rows = input.split('\n').map((row) => row.trim()).where((row) => row.isNotEmpty).toList();
 
     int currentYear = 1984;
     int currentMonth = 1;
+    int currentDay = -1;
     for (String row in rows) {
       if (row.startsWith('=')) {
         if (row.startsWith('==')) {
-          String yearString = row.replaceAll('=','').trim();
-          currentYear = int.parse("${yearString.substring(0,4)}");
+          String yearString = row.replaceAll('=','').trim().substring(0,4);
+          if(int.tryParse(yearString) == null) {
+            if (validate) print('int.parse(year)');
+            return [];
+          }
+          currentYear = int.parse(yearString);
         } else {
           String monthString = row.replaceAll('=','').trim().toLowerCase();
           String camelCasedMonthString = "${monthString[0].toUpperCase()}${monthString.substring(1)}";
           currentMonth = MonthStats.monthByName(camelCasedMonthString);
         }
+      } else if (_isDateInfo(row)) {
+        String dayString = row.substring(row.length-2);
+        if(int.tryParse(dayString) == null) {
+          if (validate) print('int.parse(day)');
+          return [];
+        }
+        currentDay = int.parse(dayString);
       } else {
-        DateTime date = DateTime(currentYear, currentMonth);
         if (currentYear == 1984) {
-          print('year');
+          if (validate) print('year');
           return [];
         }
         if (currentMonth == -1) {
-          print('month');
+          if (validate) print('month');
           return [];
+        }
+        DateTime date = DateTime(currentYear, currentMonth);
+        if (currentDay != -1) {
+          date = DateTime(currentYear, currentMonth, currentDay);
         }
         List<String> bookInfo = row.split(' - ').map((tmp) => tmp.trim()).toList();
         if (bookInfo.length != 2) {
-          print('book');
-          bookInfo.forEach((b) => {
-            print(b)
-          });
+          if (validate) {
+            bookInfo.forEach((b) => {
+              print(b)
+            });
+          }
           return [];
         }
         Book book = new Book(title: bookInfo[0], author: bookInfo[1], date: date);
@@ -75,9 +98,5 @@ class ImportFileParser {
       }
     }
     return bookList;
-  }
-
-  List<Book> addBooks(String input) {
-    return parse(input);
   }
 }
