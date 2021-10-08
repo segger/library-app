@@ -50,4 +50,14 @@ class MonthStats extends Stats {
       count: dbMap['tot']
     );
   }
+
+  static int monthByName(String header) {
+    int retValue = -1;
+    monthNames.forEach((key, value) => {
+      if (header.startsWith(value)) {
+        retValue = key
+      }
+    });
+    return retValue;
+  }
 }

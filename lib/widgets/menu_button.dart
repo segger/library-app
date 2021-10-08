@@ -87,7 +87,8 @@ class _MenuButtonState extends State<MenuButton>
     _toggleMenu();
     StatsRepository statsRepository = StatsRepository(statsProvider: DBProvider.instance);
     ExportService exportService = ExportService(storageProvider: StorageProvider.instance, statsRepository: statsRepository);
-    ImportService importService = ImportService();
+    BookRepository bookRepository = BookRepository(bookProvider: DBProvider.instance);
+    ImportService importService = ImportService(bookRepository: bookRepository);
 
     Navigator.push(context, MaterialPageRoute(
       builder: (context) {
