@@ -53,7 +53,7 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
                 return Loading();
               }
               if (state is ExportYearsLoaded) {
-                return _exportForm(state);
+                return _exportForm(0, state.exportYears);
               }
               if (state is YearExported) {
                 return Loading();
@@ -62,9 +62,8 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
                 return _importAlert(state.isValidLibraryFile);
               }
               if (state is FileImported) {
-                _bloc.dispatch(LoadExportYearsEvent());
                 _onImport();
-                return Loading();
+                return _exportForm(state.nbrOfBooks, state.exportYears);
               }
               return null;
             }
@@ -74,21 +73,22 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
     );
   }
 
-  Widget _exportForm(ExportYearsLoaded state) {
+  Widget _exportForm(int nbrOfBooks, List<int> exportYears) {
     return Column(
       children: <Widget>[
         _importButton(),
+        _nbrOfBooks(nbrOfBooks),
         Divider(
           color: Colors.black,
         ),
-        _yearDropdown(state),
+        _yearDropdown(exportYears),
         _withDateCheckbox(),
         _exportButton(),
       ],
     );
   }
 
-  Widget _yearDropdown(ExportYearsLoaded state) {
+  Widget _yearDropdown(List<int> exportYears) {
     return DropdownButtonFormField(
       value: _selectedYear,
       onChanged: (int value) {
@@ -102,7 +102,7 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
         }
         return null;
       },
-      items: state.exportYears.map((int value) {
+      items: exportYears.map((int value) {
         return DropdownMenuItem(
           value: value,
           child: Text(value.toString()),
@@ -128,6 +128,15 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
         ),
       ],
     );
+  }
+
+  Widget _nbrOfBooks(int nbrOfBooks) {
+    return nbrOfBooks > 1 ?
+      Container(
+        padding: EdgeInsets.symmetric(vertical: 16.0),
+        child: Text("Last import: ${nbrOfBooks.toString()} books"),
+      ) : 
+      Container();
   }
 
   Widget _importButton() {

@@ -19,7 +19,8 @@ class ImportFileValidated extends ImportExportState {
 }
 class FileImported extends ImportExportState {
   final int nbrOfBooks;
-  FileImported({this.nbrOfBooks});
+  final List<int> exportYears;
+  FileImported({this.nbrOfBooks, this.exportYears});
 }
 
 abstract class ImportExportEvent {}
@@ -66,7 +67,8 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
     }
     if (event is ImportFileEvent) {
       int nbrOfBooks = await importService.importFile(event.file);
-      yield FileImported(nbrOfBooks: nbrOfBooks);
+      List<int> exportYears = await exportService.getYears();
+      yield FileImported(nbrOfBooks: nbrOfBooks, exportYears: exportYears);
     }
   }
 }
