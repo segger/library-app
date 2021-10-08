@@ -17,9 +17,11 @@ class StatsRepository {
     List<Map<String, dynamic>> dbList = await statsProvider.getListGroupBy(
       tbl, "year"
     );
-    return dbList.isEmpty ? [] : List.generate(dbList.length, (i) {
+    List<YearStats> result = dbList.isEmpty ? [] : List.generate(dbList.length, (i) {
       return YearStats.of(dbList[i]);
     });
+    result.sort((a, b) => int.parse(b.name) - int.parse(a.name));
+    return result;
   }
 
   Future<List<MonthStats>> getMonthStats(int year) async {
@@ -46,7 +48,7 @@ class StatsRepository {
   Future<List<YearStats>> deleteYear(int year) async {
     var where = {'year': year};
     statsProvider.deleteWhere(tbl, where);
-    
+
     return getYearStats();
   }
 

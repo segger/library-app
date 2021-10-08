@@ -20,7 +20,6 @@ class ImportService {
   Future<int> importFile(File file) async {
     String input = await file.readAsString();
     List<Book> bookList = parser.addBooks(input);
-    // bookList.forEach((book) => print(book.asMap().toString()));
     await bookRepository.addBooks(bookList);
     return bookList.length;
   }
@@ -32,6 +31,7 @@ class ImportFileParser {
 
   bool validate(String input) {
     List<Book> books = parse(input, validate: true);
+    books.forEach((book) => print(book.asMap().toString()));
     return books.isNotEmpty;
   }
 
