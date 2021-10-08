@@ -98,6 +98,12 @@ class DBProvider {
     return await db.query(table, orderBy: orderBy, limit: limit, offset: offset);
   }
 
+  Future<void> deleteWhere(String table, Map<String, dynamic> where) async {
+    final db = await database;
+    Tuple2 whereTuple = whereBuilder(where);
+    return await db.delete(table, where: whereTuple.item1, whereArgs: whereTuple.item2);
+  }
+
   // [String sumCol = 'count'] - optional default parameter
   /* raw query
     List<Map<String, dynamic>> res = await db.rawQuery(

@@ -6,20 +6,20 @@ A flutter app for my stuff
 * [x] Sort order
    - [x] Date reversed
 * [x] Export stats
-   - [/] Export full stats
+   - [x] Export full stats
    - [] Import stats
-     - [] Verify file
+     - [x] Verify file
      - [] Confirm import
 * [x] Edit
 * [x] Delete
 * [/] Icon
 
 ### Features
-* [] Backup/restore (dropbox, google)
+* [?] Backup/restore (dropbox, google)
+* [] Search
 * [] Types (serie, sound, rate, code, etc)
 * [] States (to read, home, e-lib, )
 * [] Different types (listen, view)
-* [] Search
 
 #### data sqlite3
 * `adb root` (Use API image)

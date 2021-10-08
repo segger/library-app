@@ -19,6 +19,10 @@ class LoadMonthStatsEvent extends StatsEvent {
   final int year;
   LoadMonthStatsEvent({this.year});
 }
+class DeleteYearEvent extends StatsEvent {
+  final int year;
+  DeleteYearEvent({this.year});
+}
 
 class StatsBloc extends Bloc<StatsEvent, StatsState> {
   final StatsRepository statsRepository;
@@ -52,6 +56,10 @@ class StatsBloc extends Bloc<StatsEvent, StatsState> {
         }
         yield StatsLoaded(stats: currentStats);
       }
+    }
+    if (event is DeleteYearEvent) {
+      List<YearStats> stats = await statsRepository.deleteYear(event.year);
+      yield StatsLoaded(stats: stats);
     }
   }
 }

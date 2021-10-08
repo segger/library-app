@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:library_app/blocs/stats.dart';
 
@@ -44,7 +45,20 @@ class _StatsPageState extends State<StatsPage> {
     return ListView.builder(
       itemCount: state.stats.length,
       itemBuilder: (context, position) {
-        return StatsCard(stats: state.stats[position]);
+        return Slidable(
+          actionPane: SlidableBehindActionPane(),
+          child: StatsCard(stats: state.stats[position]),
+          secondaryActions: [
+            IconSlideAction(
+              caption: 'Delete',
+              color: Colors.red,
+              icon: Icons.delete,
+              onTap: () {
+                _bloc.dispatch(DeleteYearEvent(year: int.parse(state.stats[position].name)));
+              }
+            ),
+          ],
+        );
       },
     );
   }

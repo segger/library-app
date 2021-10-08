@@ -43,6 +43,13 @@ class StatsRepository {
     });
   }
 
+  Future<List<YearStats>> deleteYear(int year) async {
+    var where = {'year': year};
+    statsProvider.deleteWhere(tbl, where);
+    
+    return getYearStats();
+  }
+
   Future<Map<int, List<dynamic>>> getBooks(int year) async {
     var where = {'year': year};
     List<Map<String, dynamic>> dbList = await statsProvider.getListByCols(
