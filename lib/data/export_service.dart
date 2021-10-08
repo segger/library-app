@@ -22,25 +22,28 @@ class ExportService {
 
     List<MonthStats> stats = await statsRepository.getMonthStats(year);
     Map<int, List<dynamic>> books = await statsRepository.getBooks(year);
-    String data = generateYearData(year, stats, books);
+    String data = generateYearData(year, true, stats, books);
     await storageProvider.writeFile(fileName, data);
   }
 
-  Future<void> shareStats(int year) async {
+  Future<void> shareStats(int year, bool withDate) async {
     List<MonthStats> stats = await statsRepository.getMonthStats(year);
     Map<int, List<dynamic>> books = await statsRepository.getBooks(year);
-    String data = generateYearData(year, stats, books);
+    String data = generateYearData(year, withDate, stats, books);
 
     Share.share(data);
   }
 
-  String generateYearData(int year, List<MonthStats> stats, Map<int, List<dynamic>> books) {
+  String generateYearData(int year, bool withDate, List<MonthStats> stats, Map<int, List<dynamic>> books) {
     var yearTot = 0;
     var buffer = StringBuffer();
     stats.forEach((month) {
       yearTot += month.count;
       buffer.write("= ${month.name}: ${month.count} =\n");
       books[month.month].forEach((book) {
+        if (withDate) {
+          buffer.write("${book.dateAsLabel()}\n");
+        }
         buffer.write("${book.title} - ${book.author}\n");
       });
       buffer.write("\n");

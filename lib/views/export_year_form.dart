@@ -17,11 +17,13 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
 
   final _formKey = GlobalKey<FormState>();
   int _selectedYear;
+  bool _withDate;
   File _importFile;
 
   @override
   void initState() {
     _selectedYear = null;
+    _withDate = false;
     _bloc = BlocProvider.of<ImportExportBloc>(context);
     super.initState();
   }
@@ -69,6 +71,7 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
           color: Colors.black,
         ),
         _yearDropdown(state),
+        _withDateCheckbox(),
         _exportButton(),
       ],
     );
@@ -97,6 +100,22 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
       decoration: InputDecoration(
         labelText: 'Year'
       ),
+    );
+  }
+
+  Widget _withDateCheckbox() {
+    return Row(
+      children: [
+        Text('Save dates'),
+        Checkbox(
+          value: _withDate,
+          onChanged: (bool value) {
+            setState(() {
+              _withDate = value;
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -136,7 +155,7 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
 
   _export() {
     if(_formKey.currentState.validate()) {
-      _bloc.dispatch(ExportYearEvent(year: _selectedYear));
+      _bloc.dispatch(ExportYearEvent(year: _selectedYear, withDate: _withDate));
       Navigator.pop(context);
     }
   }

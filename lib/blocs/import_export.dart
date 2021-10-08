@@ -24,7 +24,8 @@ abstract class ImportExportEvent {}
 class LoadExportYearsEvent extends ImportExportEvent {}
 class ExportYearEvent extends ImportExportEvent {
   final int year;
-  ExportYearEvent({this.year});
+  final bool withDate;
+  ExportYearEvent({this.year, this.withDate});
 }
 class ImportFileValidateEvent extends ImportExportEvent {
   final File file;
@@ -53,7 +54,7 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
     }
     if (event is ExportYearEvent) {
       // await exportService.writeStats(event.year);
-      await exportService.shareStats(event.year);
+      await exportService.shareStats(event.year, event.withDate);
       yield YearExported();
     }
     if (event is ImportFileValidateEvent) {
