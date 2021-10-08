@@ -7,7 +7,13 @@ import 'package:library_app/blocs/import_export.dart';
 
 import 'package:library_app/widgets/load_components.dart';
 
+typedef OnImportCallback = Function();
+
 class ImportExportYearForm extends StatefulWidget {
+  final OnImportCallback onImport;
+
+  ImportExportYearForm({@required this.onImport});
+
   @override
   _ImportExportYearFormState createState() => _ImportExportYearFormState();
 }
@@ -26,6 +32,10 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
     _withDate = false;
     _bloc = BlocProvider.of<ImportExportBloc>(context);
     super.initState();
+  }
+
+  void _onImport() {
+    widget.onImport();
   }
 
   @override
@@ -53,6 +63,7 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
               }
               if (state is FileImported) {
                 _bloc.dispatch(LoadExportYearsEvent());
+                _onImport();
                 return Loading();
               }
               return null;

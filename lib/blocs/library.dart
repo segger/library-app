@@ -48,7 +48,7 @@ class DeleteBookLibraryEvent extends LibraryEvent {
 class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
   final BookRepository bookRepository;
 
-  final int _length = 20;
+  final int _length = 100;
 
   LibraryBloc({@required this.bookRepository})
     : assert(bookRepository != null);
@@ -58,12 +58,14 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
 
   @override
   Stream<LibraryState> mapEventToState(LibraryEvent event) async* {
-    if (event is LoadLibraryEvent && !_hasReachedMax(currentState)) {
+    // if (event is LoadLibraryEvent && !_hasReachedMax(currentState)) {
+    if (event is LoadLibraryEvent) {
       try {
         if (currentState is LibraryInit) {
           final List<Book> books = await getBookList(SortOrder.date, 0, _length);
           yield LibraryLoaded(books, SortOrder.date, hasReachedMax: false);
         }
+        /*
         if (currentState is LibraryLoaded) {
           LibraryLoaded loadedState = (currentState as LibraryLoaded);
           final List<Book> books = await getBookList(
@@ -73,6 +75,16 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
           );
           yield books.isEmpty ? loadedState.copyWith(hasReachedMax: true)
             : LibraryLoaded(loadedState.books + books, loadedState.sortOrder, hasReachedMax: false);
+        }*/
+        if (currentState is LibraryLoaded) {
+          LibraryLoaded loadedState = (currentState as LibraryLoaded);
+          final List<Book> books = await getBookList(
+            loadedState.sortOrder,
+            0,
+            _length
+          );
+          print(books);
+          yield LibraryLoaded(books, loadedState.sortOrder, hasReachedMax: false);
         }
       } catch (_) {
         yield LibraryError();
@@ -141,7 +153,7 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
     }
   }
 
-  bool _hasReachedMax(LibraryState state) => state is LibraryLoaded && state.hasReachedMax;
+  // bool _hasReachedMax(LibraryState state) => state is LibraryLoaded && state.hasReachedMax;
 
   Future<List<Book>> getBookList(SortOrder sortOrder, int startIdx, int limit) async {
     return await bookRepository.getBookList(sortOrder, startIdx, limit);

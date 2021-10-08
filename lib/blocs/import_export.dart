@@ -17,7 +17,10 @@ class ImportFileValidated extends ImportExportState {
   final bool isValidLibraryFile;
   ImportFileValidated({this.isValidLibraryFile});
 }
-class FileImported extends ImportExportState {}
+class FileImported extends ImportExportState {
+  final int nbrOfBooks;
+  FileImported({this.nbrOfBooks});
+}
 
 abstract class ImportExportEvent {}
 
@@ -62,8 +65,8 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
       yield ImportFileValidated(isValidLibraryFile: valid);
     }
     if (event is ImportFileEvent) {
-      await importService.importFile(event.file);
-      yield FileImported();
+      int nbrOfBooks = await importService.importFile(event.file);
+      yield FileImported(nbrOfBooks: nbrOfBooks);
     }
   }
 }

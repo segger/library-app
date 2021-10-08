@@ -72,6 +72,7 @@ class _MainPageState extends State<MainPage> {
           icon: Icon(Icons.refresh),
           onPressed: () {
             // Reload
+            print('RELOAD');
             _libraryBloc.dispatch(LoadLibraryEvent());
             _statsBloc.dispatch(LoadYearStatsEvent());
           },

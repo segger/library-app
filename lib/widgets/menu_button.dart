@@ -96,7 +96,12 @@ class _MenuButtonState extends State<MenuButton>
           builder: (context) => ImportExportBloc(
             exportService: exportService, importService: importService
           )..dispatch(LoadExportYearsEvent()),
-          child: ImportExportYearForm(),
+          child: ImportExportYearForm(
+            onImport: () {
+              _libraryBloc.dispatch(LoadLibraryEvent());
+              _statsBloc.dispatch(LoadYearStatsEvent());
+            }
+          ),
         );
       }
     ));

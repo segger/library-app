@@ -17,11 +17,12 @@ class ImportService {
     return parser.validate(input);
   }
 
-  Future<void> importFile(File file) async {
+  Future<int> importFile(File file) async {
     String input = await file.readAsString();
     List<Book> bookList = parser.addBooks(input);
-    bookList.forEach((book) => print(book.asMap().toString()));
-    // await bookRepository.addBooks(bookList);
+    // bookList.forEach((book) => print(book.asMap().toString()));
+    await bookRepository.addBooks(bookList);
+    return bookList.length;
   }
 }
 
