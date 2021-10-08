@@ -43,4 +43,10 @@ class BookRepository {
   deleteBook(Book book) async {
     await bookProvider.delete(DBConstants.BOOKS_TABLE, book.asMap());
   }
+
+  addBooks(List<Book> bookList) {
+    bookList.forEach((book) async => {
+      await bookProvider.insert(DBConstants.BOOKS_TABLE, book.asMap())
+    });
+  }
 }

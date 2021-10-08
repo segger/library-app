@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 
 import 'package:library_app/data/export_service.dart';
+import 'package:library_app/data/import_service.dart';
 
 abstract class ImportExportState {}
 
@@ -36,9 +37,10 @@ class ImportFileEvent extends ImportExportEvent {
 
 class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
   final ExportService exportService;
+  final ImportService importService;
 
-  ImportExportBloc(this.exportService)
-    : assert(exportService != null);
+  ImportExportBloc({this.exportService, this.importService})
+    : assert(exportService != null, importService != null);
 
   @override
   ImportExportState get initialState => ExportInit();
@@ -50,18 +52,16 @@ class ImportExportBloc extends Bloc<ImportExportEvent, ImportExportState> {
       yield ExportYearsLoaded(exportYears: exportYears);
     }
     if (event is ExportYearEvent) {
-      await exportService.writeStats(event.year);
+      // await exportService.writeStats(event.year);
       await exportService.shareStats(event.year);
       yield YearExported();
     }
     if (event is ImportFileValidateEvent) {
-      // await importService.validateLibraryFile(event.file);
-      yield ImportFileValidated(isValidLibraryFile: true);
+      bool valid = await importService.validateLibraryFile(event.file);
+      yield ImportFileValidated(isValidLibraryFile: valid);
     }
     if (event is ImportFileEvent) {
-      String input = await event.file.readAsString();
-      print(input);
-      // await importService.importFile();
+      await importService.importFile(event.file);
       yield FileImported();
     }
   }
