@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:library_app/data/stats_repository.dart';
 import 'package:library_app/models/stats.dart';
@@ -10,8 +10,9 @@ class ExportService {
   final StorageProvider storageProvider;
   final StatsRepository statsRepository;
 
-  ExportService({@required this.storageProvider, @required this.statsRepository})
-    : assert(storageProvider != null, statsRepository != null);
+  ExportService(
+      {@required this.storageProvider, @required this.statsRepository})
+      : assert(storageProvider != null, statsRepository != null);
 
   Future<List<int>> getYears() async {
     return await statsRepository.getYears();
@@ -34,7 +35,8 @@ class ExportService {
     Share.share(data);
   }
 
-  String generateYearData(int year, bool withDate, List<MonthStats> stats, Map<int, List<dynamic>> books) {
+  String generateYearData(int year, bool withDate, List<MonthStats> stats,
+      Map<int, List<dynamic>> books) {
     var yearTot = 0;
     var buffer = StringBuffer();
     stats.forEach((month) {
