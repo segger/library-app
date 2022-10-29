@@ -11,8 +11,7 @@ import 'package:library_app/views/book_form.dart';
 import 'package:library_app/widgets/load_components.dart';
 
 class BooksPage extends StatefulWidget {
-  
-  @override  
+  @override
   _BooksPageState createState() => _BooksPageState();
 }
 
@@ -75,43 +74,45 @@ class _BooksPageState extends State<BooksPage> {
   }
 
   Widget _libraryItem(Book book) {
-    
     return Slidable(
-      actionPane: SlidableBehindActionPane(),
-      child: _libraryItemCard(book),
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
+      startActionPane: ActionPane(
+        motion: const BehindMotion(),
+        children: [],
+      ),
+      endActionPane: ActionPane(motion: const DrawerMotion(), children: [
+        SlidableAction(
+          label: 'Delete',
+          backgroundColor: Colors.red,
           icon: Icons.delete,
-          onTap: () {
+          onPressed: (context) {
             _libraryBloc.dispatch(DeleteBookLibraryEvent(book));
             _statsBloc.dispatch(LoadYearStatsEvent());
           },
         )
-      ],
+      ]),
+      child: _libraryItemCard(book),
     );
   }
 
   Widget _libraryItemCard(Book book) {
     return GestureDetector(
-    onTap: () {
-      Navigator.push(context, MaterialPageRoute(
-        builder: (context) => BookForm(
-          onSave: (updatedBook) {
-            _libraryBloc.dispatch(EditBookLibraryEvent(updatedBook));
-            _statsBloc.dispatch(LoadYearStatsEvent());
-          },
-          book: book
-        )
-      ));
-    },
-    child: Card(
-      child: ListTile(
-        title: Text('${book.title} - ${book.author}'),
-        subtitle: book.date != null ? Text(book.dateAsLabel()) : Text(''),
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BookForm(
+                    onSave: (updatedBook) {
+                      _libraryBloc.dispatch(EditBookLibraryEvent(updatedBook));
+                      _statsBloc.dispatch(LoadYearStatsEvent());
+                    },
+                    book: book)));
+      },
+      child: Card(
+        child: ListTile(
+          title: Text('${book.title} - ${book.author}'),
+          subtitle: book.date != null ? Text(book.dateAsLabel()) : Text(''),
+        ),
       ),
-    ),
-  );
+    );
   }
 }

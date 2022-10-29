@@ -25,20 +25,19 @@ class _StatsPageState extends State<StatsPage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-      bloc: _bloc,
-      builder: (BuildContext context, StatsState state) {
-        if (state is StatsInit) {
-          return Loading();
-        }
-        if (state is StatsError) {
-          return LoadingError(errorText: 'Failed to get stats');
-        }
-        if (state is StatsLoaded) {
-          return _statsList(state);
-        }
-        return null;
-      }
-    );
+        bloc: _bloc,
+        builder: (BuildContext context, StatsState state) {
+          if (state is StatsInit) {
+            return Loading();
+          }
+          if (state is StatsError) {
+            return LoadingError(errorText: 'Failed to get stats');
+          }
+          if (state is StatsLoaded) {
+            return _statsList(state);
+          }
+          return null;
+        });
   }
 
   Widget _statsList(StatsLoaded state) {
@@ -46,18 +45,21 @@ class _StatsPageState extends State<StatsPage> {
       itemCount: state.stats.length,
       itemBuilder: (context, position) {
         return Slidable(
-          actionPane: SlidableBehindActionPane(),
+          startActionPane: ActionPane(
+            motion: const BehindMotion(),
+            children: [],
+          ),
+          endActionPane: ActionPane(motion: const DrawerMotion(), children: [
+            SlidableAction(
+                label: 'Delete',
+                backgroundColor: Colors.red,
+                icon: Icons.delete,
+                onPressed: (context) {
+                  _bloc.dispatch(DeleteYearEvent(
+                      year: int.parse(state.stats[position].name)));
+                }),
+          ]),
           child: StatsCard(stats: state.stats[position]),
-          secondaryActions: [
-            IconSlideAction(
-              caption: 'Delete',
-              color: Colors.red,
-              icon: Icons.delete,
-              onTap: () {
-                _bloc.dispatch(DeleteYearEvent(year: int.parse(state.stats[position].name)));
-              }
-            ),
-          ],
         );
       },
     );
