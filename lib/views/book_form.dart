@@ -1,4 +1,4 @@
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:datetime_picker_formfield_new/datetime_picker_formfield_new.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -27,7 +27,6 @@ class _BookFormState extends State<BookForm> {
     Navigator.pop(context);
   }
 
-
   @override
   void initState() {
     // var dateLabel = widget.book.date != null ? widget.book.date.asLabel() : '';
@@ -38,8 +37,8 @@ class _BookFormState extends State<BookForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: _appBar(),
-        body: _body(),
+      appBar: _appBar(),
+      body: _body(),
     );
   }
 
@@ -92,14 +91,12 @@ class _BookFormState extends State<BookForm> {
       },
       initialValue: book.date,
       validator: (value) {
-        if(value == null) {
+        if (value == null) {
           return 'No date';
         }
         return null;
       },
-      decoration: InputDecoration(
-        labelText: 'Date'
-      ),
+      decoration: InputDecoration(labelText: 'Date'),
       onSaved: (value) => book.date = value,
     );
   }
@@ -108,14 +105,12 @@ class _BookFormState extends State<BookForm> {
     return TextFormField(
       initialValue: book.title,
       validator: (value) {
-        if(value.isEmpty) {
+        if (value.isEmpty) {
           return 'No title';
         }
         return null;
       },
-      decoration: InputDecoration(
-          labelText: 'Title'
-      ),
+      decoration: InputDecoration(labelText: 'Title'),
       onSaved: (value) => book.title = value,
     );
   }
@@ -124,14 +119,12 @@ class _BookFormState extends State<BookForm> {
     return TextFormField(
       initialValue: book.author,
       validator: (value) {
-        if(value.isEmpty) {
+        if (value.isEmpty) {
           return 'No author';
         }
         return null;
       },
-      decoration: InputDecoration(
-        labelText: 'Author'
-      ),
+      decoration: InputDecoration(labelText: 'Author'),
       onSaved: (value) => book.author = value,
     );
   }
