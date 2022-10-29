@@ -13,11 +13,10 @@ class SortOrderIcon extends StatefulWidget {
 }
 
 class _SortOrderIconState extends State<SortOrderIcon> {
-
   SortOrder _sortOrder = SortOrder.date;
 
   _getNewOrder(SortOrder order) {
-    switch(order) {
+    switch (order) {
       case SortOrder.date:
         return SortOrder.title;
       case SortOrder.title:
@@ -35,16 +34,15 @@ class _SortOrderIconState extends State<SortOrderIcon> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.sort),
-      onPressed: () {
-        _sortLibrary();
-        Scaffold.of(context).showSnackBar(_notifySortOrderUpdated());
-      }
-    );
+        icon: Icon(Icons.sort),
+        onPressed: () {
+          _sortLibrary();
+          ScaffoldMessenger.of(context).showSnackBar(_notifySortOrderUpdated());
+        });
   }
 
   _getSortOrderLabel(SortOrder order) {
-    switch(order) {
+    switch (order) {
       case SortOrder.date:
         return "date";
       case SortOrder.title:

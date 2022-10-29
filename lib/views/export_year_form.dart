@@ -41,33 +41,34 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Import/Export"),),
+      appBar: AppBar(
+        title: Text("Import/Export"),
+      ),
       body: Form(
         key: _formKey,
         child: Container(
           margin: EdgeInsets.all(20.0),
           child: BlocBuilder(
-            bloc: _bloc,
-            builder: (BuildContext context, ImportExportState state) {
-              if (state is ExportInit) {
-                return Loading();
-              }
-              if (state is ExportYearsLoaded) {
-                return _exportForm(0, state.exportYears);
-              }
-              if (state is YearExported) {
-                return Loading();
-              }
-              if (state is ImportFileValidated) {
-                return _importAlert(state.isValidLibraryFile);
-              }
-              if (state is FileImported) {
-                _onImport();
-                return _exportForm(state.nbrOfBooks, state.exportYears);
-              }
-              return null;
-            }
-          ),
+              bloc: _bloc,
+              builder: (BuildContext context, ImportExportState state) {
+                if (state is ExportInit) {
+                  return Loading();
+                }
+                if (state is ExportYearsLoaded) {
+                  return _exportForm(0, state.exportYears);
+                }
+                if (state is YearExported) {
+                  return Loading();
+                }
+                if (state is ImportFileValidated) {
+                  return _importAlert(state.isValidLibraryFile);
+                }
+                if (state is FileImported) {
+                  _onImport();
+                  return _exportForm(state.nbrOfBooks, state.exportYears);
+                }
+                return null;
+              }),
         ),
       ),
     );
@@ -108,9 +109,7 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
           child: Text(value.toString()),
         );
       }).toList(),
-      decoration: InputDecoration(
-        labelText: 'Year'
-      ),
+      decoration: InputDecoration(labelText: 'Year'),
     );
   }
 
@@ -131,20 +130,19 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
   }
 
   Widget _nbrOfBooks(int nbrOfBooks) {
-    return nbrOfBooks > 1 ?
-      Container(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
-        child: Text("Last import: ${nbrOfBooks.toString()} books"),
-      ) : 
-      Container();
+    return nbrOfBooks > 1
+        ? Container(
+            padding: EdgeInsets.symmetric(vertical: 16.0),
+            child: Text("Last import: ${nbrOfBooks.toString()} books"),
+          )
+        : Container();
   }
 
   Widget _importButton() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16.0),
-      child: RaisedButton(
+      child: ElevatedButton(
         child: Text('Import'),
-        color: Colors.blue,
         onPressed: () {
           _filePick();
         },
@@ -164,30 +162,28 @@ class _ImportExportYearFormState extends State<ImportExportYearForm> {
   Widget _exportButton() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16.0),
-      child: RaisedButton(
+      child: ElevatedButton(
         child: Text('Export'),
-        color: Colors.blue,
-        disabledColor: Colors.black38,
         onPressed: _selectedYear == null ? null : _export,
       ),
     );
   }
 
   _export() {
-    if(_formKey.currentState.validate()) {
+    if (_formKey.currentState.validate()) {
       _bloc.dispatch(ExportYearEvent(year: _selectedYear, withDate: _withDate));
       Navigator.pop(context);
     }
   }
 
   Widget _importAlert(bool isValidLibraryFile) {
-    FlatButton import = FlatButton(
+    TextButton import = TextButton(
       child: Text('Import'),
       onPressed: () {
         _bloc.dispatch(ImportFileEvent(file: _importFile));
       },
     );
-    FlatButton cancel = FlatButton(
+    TextButton cancel = TextButton(
       child: Text('Cancel'),
       onPressed: () {
         _bloc.dispatch(LoadExportYearsEvent());
