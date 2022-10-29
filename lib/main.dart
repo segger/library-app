@@ -41,14 +41,14 @@ class LibraryApp extends StatelessWidget {
       home: MultiBlocProvider(
         providers: [
           BlocProvider<NavTabsBloc>(
-            builder: (context) => NavTabsBloc(),
+            create: (context) => NavTabsBloc(),
           ),
           BlocProvider<LibraryBloc>(
-            builder: (context) => LibraryBloc(bookRepository: bookRepository)
+            create: (context) => LibraryBloc(bookRepository: bookRepository)
               ..add(LoadLibraryEvent()),
           ),
           BlocProvider<StatsBloc>(
-            builder: (context) =>
+            create: (context) =>
                 StatsBloc(statsRepository)..add(LoadYearStatsEvent()),
           )
         ],

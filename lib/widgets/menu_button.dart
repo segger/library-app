@@ -16,8 +16,7 @@ class MenuButton extends StatefulWidget {
 }
 
 class _MenuButtonState extends State<MenuButton>
-  with SingleTickerProviderStateMixin {
-
+    with SingleTickerProviderStateMixin {
   LibraryBloc _libraryBloc;
   StatsBloc _statsBloc;
 
@@ -42,26 +41,19 @@ class _MenuButtonState extends State<MenuButton>
   }
 
   _initMenu() {
-    _menuController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 500)
-    )..addListener(() { setState(() {}); } );
-    _menuIcon = Tween<double>(
-      begin: 0.0,
-      end: 1.0
-    ).animate(_menuController);
-    _menuColor = ColorTween(
-      begin: Colors.blue,
-      end: Colors.red
-    ).animate(_menuController);
-    _menuPos = Tween<double>(
-      begin: 56.0,
-      end: -14.0
-    ).animate(_menuController);
+    _menuController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+          ..addListener(() {
+            setState(() {});
+          });
+    _menuIcon = Tween<double>(begin: 0.0, end: 1.0).animate(_menuController);
+    _menuColor = ColorTween(begin: Colors.blue, end: Colors.red)
+        .animate(_menuController);
+    _menuPos = Tween<double>(begin: 56.0, end: -14.0).animate(_menuController);
   }
 
   _toggleMenu() {
-    if(!menuOpen) {
+    if (!menuOpen) {
       _menuController.forward();
     } else {
       _menuController.reverse();
@@ -71,40 +63,39 @@ class _MenuButtonState extends State<MenuButton>
 
   _addNewBook() {
     _toggleMenu();
-    Navigator.push(context, MaterialPageRoute(
-        builder: (context) => BookForm(
-          onSave: (book) {
-            _libraryBloc.dispatch(AddBookLibraryEvent(book));
-            _statsBloc.dispatch(LoadYearStatsEvent());
-          },
-          book: Book()
-        )
-      )
-    );
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BookForm(
+                onSave: (book) {
+                  _libraryBloc.add(AddBookLibraryEvent(book));
+                  _statsBloc.add(LoadYearStatsEvent());
+                },
+                book: Book())));
   }
 
   _exportDialog() {
     _toggleMenu();
-    StatsRepository statsRepository = StatsRepository(statsProvider: DBProvider.instance);
-    ExportService exportService = ExportService(storageProvider: StorageProvider.instance, statsRepository: statsRepository);
-    BookRepository bookRepository = BookRepository(bookProvider: DBProvider.instance);
+    StatsRepository statsRepository =
+        StatsRepository(statsProvider: DBProvider.instance);
+    ExportService exportService = ExportService(
+        storageProvider: StorageProvider.instance,
+        statsRepository: statsRepository);
+    BookRepository bookRepository =
+        BookRepository(bookProvider: DBProvider.instance);
     ImportService importService = ImportService(bookRepository: bookRepository);
 
-    Navigator.push(context, MaterialPageRoute(
-      builder: (context) {
-        return BlocProvider<ImportExportBloc>(
-          builder: (context) => ImportExportBloc(
-            exportService: exportService, importService: importService
-          )..dispatch(LoadExportYearsEvent()),
-          child: ImportExportYearForm(
-            onImport: () {
-              _libraryBloc.dispatch(LoadLibraryEvent());
-              _statsBloc.dispatch(LoadYearStatsEvent());
-            }
-          ),
-        );
-      }
-    ));
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return BlocProvider<ImportExportBloc>(
+        create: (context) => ImportExportBloc(
+            exportService: exportService, importService: importService)
+          ..add(LoadExportYearsEvent()),
+        child: ImportExportYearForm(onImport: () {
+          _libraryBloc.add(LoadLibraryEvent());
+          _statsBloc.add(LoadYearStatsEvent());
+        }),
+      );
+    }));
   }
 
   Widget _exportMenuItem() {
@@ -135,14 +126,11 @@ class _MenuButtonState extends State<MenuButton>
         heroTag: 'menu',
         backgroundColor: _menuColor.value,
         onPressed: _toggleMenu,
-        child: AnimatedIcon(
-          icon: AnimatedIcons.menu_close,
-          progress: _menuIcon
-        ),
+        child:
+            AnimatedIcon(icon: AnimatedIcons.menu_close, progress: _menuIcon),
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -150,17 +138,12 @@ class _MenuButtonState extends State<MenuButton>
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Transform(
-          transform: Matrix4.translationValues(
-            0.0, _menuPos.value * 2.0, 0.0
-          ),
-          child: _exportMenuItem()
-        ),
+            transform:
+                Matrix4.translationValues(0.0, _menuPos.value * 2.0, 0.0),
+            child: _exportMenuItem()),
         Transform(
-          transform: Matrix4.translationValues(
-            0.0, _menuPos.value, 0.0
-          ),
-          child: _addNewBookMenuItem()
-        ),
+            transform: Matrix4.translationValues(0.0, _menuPos.value, 0.0),
+            child: _addNewBookMenuItem()),
         _addNewMenu(),
       ],
     );
