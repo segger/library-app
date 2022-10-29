@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_bloc: ^0.18.0
+  flutter_bloc: ^1.0.0
 
   # db
   sqflite: ^2.2.0+2

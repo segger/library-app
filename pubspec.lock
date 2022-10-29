@@ -28,7 +28,7 @@ packages:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.14.4"
+    version: "1.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -138,7 +138,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.18.3"
+    version: "1.0.0"
   flutter_launcher_icons:
     dependency: "direct dev"
     description:
@@ -310,6 +310,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
+  provider:
+    dependency: transitive
+    description:
+      name: provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.0"
   rxdart:
     dependency: transitive
     description:

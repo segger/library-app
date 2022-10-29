@@ -7,19 +7,19 @@ import 'package:library_app/models/book.dart';
 abstract class LibraryState {}
 
 class LibraryInit extends LibraryState {}
+
 class LibraryError extends LibraryState {}
+
 class LibraryLoaded extends LibraryState {
   final List<Book> books;
   final bool hasReachedMax;
   final SortOrder sortOrder;
-  LibraryLoaded(this.books, this.sortOrder, { this.hasReachedMax });
+  LibraryLoaded(this.books, this.sortOrder, {this.hasReachedMax});
 
-  LibraryLoaded copyWith({ List<Book> books, SortOrder sortOrder, bool hasReachedMax }) {
-    return LibraryLoaded(
-      books ?? this.books,
-      sortOrder ?? this.sortOrder,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax
-    );
+  LibraryLoaded copyWith(
+      {List<Book> books, SortOrder sortOrder, bool hasReachedMax}) {
+    return LibraryLoaded(books ?? this.books, sortOrder ?? this.sortOrder,
+        hasReachedMax: hasReachedMax ?? this.hasReachedMax);
   }
 }
 
@@ -28,18 +28,22 @@ abstract class LibraryEvent {}
 class LoadLibraryEvent extends LibraryEvent {
   LoadLibraryEvent();
 }
+
 class SortLibraryEvent extends LibraryEvent {
   final SortOrder sortOrder;
   SortLibraryEvent(this.sortOrder);
 }
+
 class AddBookLibraryEvent extends LibraryEvent {
   final Book book;
   AddBookLibraryEvent(this.book);
 }
+
 class EditBookLibraryEvent extends LibraryEvent {
   final Book book;
   EditBookLibraryEvent(this.book);
 }
+
 class DeleteBookLibraryEvent extends LibraryEvent {
   final Book book;
   DeleteBookLibraryEvent(this.book);
@@ -50,8 +54,7 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
 
   final int _length = 100;
 
-  LibraryBloc({@required this.bookRepository})
-    : assert(bookRepository != null);
+  LibraryBloc({@required this.bookRepository}) : assert(bookRepository != null);
 
   @override
   LibraryState get initialState => LibraryInit();
@@ -61,73 +64,63 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
     // if (event is LoadLibraryEvent && !_hasReachedMax(currentState)) {
     if (event is LoadLibraryEvent) {
       try {
-        if (currentState is LibraryInit) {
-          final List<Book> books = await getBookList(SortOrder.date, 0, _length);
+        if (state is LibraryInit) {
+          final List<Book> books =
+              await getBookList(SortOrder.date, 0, _length);
           yield LibraryLoaded(books, SortOrder.date, hasReachedMax: false);
         }
-        /*
-        if (currentState is LibraryLoaded) {
-          LibraryLoaded loadedState = (currentState as LibraryLoaded);
-          final List<Book> books = await getBookList(
-            loadedState.sortOrder,
-            loadedState.books.length,
-            _length
-          );
-          yield books.isEmpty ? loadedState.copyWith(hasReachedMax: true)
-            : LibraryLoaded(loadedState.books + books, loadedState.sortOrder, hasReachedMax: false);
-        }*/
-        if (currentState is LibraryLoaded) {
-          LibraryLoaded loadedState = (currentState as LibraryLoaded);
-          final List<Book> books = await getBookList(
-            loadedState.sortOrder,
-            0,
-            _length
-          );
+        if (state is LibraryLoaded) {
+          LibraryLoaded loadedState = (state as LibraryLoaded);
+          final List<Book> books =
+              await getBookList(loadedState.sortOrder, 0, _length);
           print(books);
-          yield LibraryLoaded(books, loadedState.sortOrder, hasReachedMax: false);
+          yield LibraryLoaded(books, loadedState.sortOrder,
+              hasReachedMax: false);
         }
       } catch (_) {
         yield LibraryError();
       }
     }
     if (event is AddBookLibraryEvent) {
-      if (currentState is LibraryLoaded) {
+      if (state is LibraryLoaded) {
         Book newBook = await bookRepository.addBook(event.book);
-        LibraryLoaded loadedState = (currentState as LibraryLoaded);
-        final List<Book> updatedLibrary =
-          List.from(loadedState.books)
+        LibraryLoaded loadedState = (state as LibraryLoaded);
+        final List<Book> updatedLibrary = List.from(loadedState.books)
           ..insert(0, newBook);
-        yield LibraryLoaded(updatedLibrary, loadedState.sortOrder, hasReachedMax: false);
+        yield LibraryLoaded(updatedLibrary, loadedState.sortOrder,
+            hasReachedMax: false);
       } else {
         yield LibraryError();
       }
     }
     if (event is EditBookLibraryEvent) {
-      if (currentState is LibraryLoaded) {
+      if (state is LibraryLoaded) {
         await bookRepository.editBook(event.book);
-        LibraryLoaded loadedState = (currentState as LibraryLoaded);
-        int idx = loadedState.books.indexWhere((book) => book.id == event.book.id);
-        final List<Book> updatedLibrary =
-          List.from(loadedState.books)
-          ..replaceRange(idx, idx+1, [event.book]);
-        yield LibraryLoaded(updatedLibrary, loadedState.sortOrder, hasReachedMax: false);
+        LibraryLoaded loadedState = (state as LibraryLoaded);
+        int idx =
+            loadedState.books.indexWhere((book) => book.id == event.book.id);
+        final List<Book> updatedLibrary = List.from(loadedState.books)
+          ..replaceRange(idx, idx + 1, [event.book]);
+        yield LibraryLoaded(updatedLibrary, loadedState.sortOrder,
+            hasReachedMax: false);
       }
     }
     if (event is DeleteBookLibraryEvent) {
-      if (currentState is LibraryLoaded) {
+      if (state is LibraryLoaded) {
         await bookRepository.deleteBook(event.book);
-        LibraryLoaded loadedState = (currentState as LibraryLoaded);
-        int idx = loadedState.books.indexWhere((book) => book.id == event.book.id);
-        final List<Book> updatedLibrary =
-          List.from(loadedState.books)
+        LibraryLoaded loadedState = (state as LibraryLoaded);
+        int idx =
+            loadedState.books.indexWhere((book) => book.id == event.book.id);
+        final List<Book> updatedLibrary = List.from(loadedState.books)
           ..removeAt(idx);
-        yield LibraryLoaded(updatedLibrary, loadedState.sortOrder, hasReachedMax: false);
+        yield LibraryLoaded(updatedLibrary, loadedState.sortOrder,
+            hasReachedMax: false);
       }
     }
     if (event is SortLibraryEvent) {
-      if (currentState is LibraryLoaded) {
-        LibraryLoaded loadedState = (currentState as LibraryLoaded);
-        switch(event.sortOrder) {
+      if (state is LibraryLoaded) {
+        LibraryLoaded loadedState = (state as LibraryLoaded);
+        switch (event.sortOrder) {
           case SortOrder.title:
             loadedState.books.sort((a, b) {
               return a.title.compareTo(b.title);
@@ -145,17 +138,18 @@ class LibraryBloc extends Bloc<LibraryEvent, LibraryState> {
             });
             break;
         }
-        
-        final List<Book> sortedLibrary =
-          List.from(loadedState.books);
-        yield LibraryLoaded(sortedLibrary, event.sortOrder, hasReachedMax: loadedState.hasReachedMax);
+
+        final List<Book> sortedLibrary = List.from(loadedState.books);
+        yield LibraryLoaded(sortedLibrary, event.sortOrder,
+            hasReachedMax: loadedState.hasReachedMax);
       }
     }
   }
 
   // bool _hasReachedMax(LibraryState state) => state is LibraryLoaded && state.hasReachedMax;
 
-  Future<List<Book>> getBookList(SortOrder sortOrder, int startIdx, int limit) async {
+  Future<List<Book>> getBookList(
+      SortOrder sortOrder, int startIdx, int limit) async {
     return await bookRepository.getBookList(sortOrder, startIdx, limit);
   }
 }

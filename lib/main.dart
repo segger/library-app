@@ -12,26 +12,23 @@ import 'package:library_app/pages/main_page.dart';
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
-  final BookRepository bookRepository = BookRepository(
-    bookProvider: DBProvider.instance
-  );
-  final StatsRepository statsRepository = StatsRepository(
-    statsProvider: DBProvider.instance
-  );
+  final BookRepository bookRepository =
+      BookRepository(bookProvider: DBProvider.instance);
+  final StatsRepository statsRepository =
+      StatsRepository(statsProvider: DBProvider.instance);
 
   runApp(LibraryApp(
-    bookRepository: bookRepository,
-    statsRepository: statsRepository
-  ));
+      bookRepository: bookRepository, statsRepository: statsRepository));
 }
 
 class LibraryApp extends StatelessWidget {
   final BookRepository bookRepository;
   final StatsRepository statsRepository;
 
-  LibraryApp({Key key, @required this.bookRepository, @required this.statsRepository})
-    : super(key: key);
-  
+  LibraryApp(
+      {Key key, @required this.bookRepository, @required this.statsRepository})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -41,18 +38,18 @@ class LibraryApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: BlocProviderTree(
-        blocProviders: [
+      home: MultiBlocProvider(
+        providers: [
           BlocProvider<NavTabsBloc>(
             builder: (context) => NavTabsBloc(),
           ),
           BlocProvider<LibraryBloc>(
             builder: (context) => LibraryBloc(bookRepository: bookRepository)
-              ..dispatch(LoadLibraryEvent()),
+              ..add(LoadLibraryEvent()),
           ),
           BlocProvider<StatsBloc>(
-            builder: (context) => StatsBloc(statsRepository)
-            ..dispatch(LoadYearStatsEvent()),
+            builder: (context) =>
+                StatsBloc(statsRepository)..add(LoadYearStatsEvent()),
           )
         ],
         child: MainPage(),

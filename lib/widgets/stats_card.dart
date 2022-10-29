@@ -31,8 +31,7 @@ class _StatsCardState extends State<StatsCard> {
         title: _title(),
         onExpansionChanged: (open) {
           if (open) {
-            _bloc.dispatch(
-                LoadMonthStatsEvent(year: int.parse(widget.stats.name)));
+            _bloc.add(LoadMonthStatsEvent(year: int.parse(widget.stats.name)));
           }
         },
         children: _expansionContent(),
